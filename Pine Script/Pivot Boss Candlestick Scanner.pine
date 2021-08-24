@@ -1,0 +1,28 @@
+//@version=4
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © pranjalchaubey
+
+//Structural Pivots
+study(title="[CP]Pivot Boss Candlestick Scanner", shorttitle="[CP]PBCS", overlay=true, max_labels_count=500)
+
+
+// WICK REVERSAL SETUP 
+//==============================================================================
+// Inputs
+enable_wick_reversal_setup  = input(true,   type=input.bool,                            title="Enable Wick Reversal Setup")
+wick2bodyRatio              = input(2.5,    type=input.float,   minval=1, maxval=5,     title="Wick Reversal Setup: Wick to Body Ratio" )
+closePercentage             = input(35,     type=input.integer, minval=1, maxval=99,    title="Wick Reversal Setup: Top and Bottom Bar Close Percentage" )
+
+
+// Calculations 
+actual_close_percentage = closePercentage/100 
+bar_body = abs(open - close)
+wick_length = (open - close) <= 0 ? (high - close) + (open - low) : (high - open) + (close - low)
+
+//==============================================================================
+// Debugging
+//==============================================================================
+plotchar(bar_body, "Bar Body", "", location = location.top, size=size.tiny, color=color.lime)
+plotchar(wick_length, "Wick Length", "", location = location.top, size=size.tiny, color=color.lime)
+
+
