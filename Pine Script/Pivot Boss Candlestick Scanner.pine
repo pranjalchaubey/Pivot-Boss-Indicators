@@ -6,29 +6,30 @@
 study(title="[CP]Pivot Boss Candlestick Scanner", shorttitle="[CP]PBCSS", overlay=true, max_labels_count=500)
 
 
-// User Inputs 
+// General User Inputs 
 //==============================================================================
 // Set the date range
-startDate   = input(title="Start Date",     type=input.integer, defval=1,       minval=1,       maxval=31)
-startMonth  = input(title="Start Month",    type=input.integer, defval=1,       minval=1,       maxval=12)
-startYear   = input(title="Start Year",     type=input.integer, defval=2010,    minval=1970,    maxval=2100)
+startDate   = input(title="Start Date",     type=input.integer, defval=1,       minval=1,       maxval=31,      group="General User Inputs")
+startMonth  = input(title="Start Month",    type=input.integer, defval=1,       minval=1,       maxval=12,      group="General User Inputs")
+startYear   = input(title="Start Year",     type=input.integer, defval=2010,    minval=1970,    maxval=2100,    group="General User Inputs")
 
-endDate     = input(title="End Date",       type=input.integer, defval=31,      minval=1,       maxval=31)
-endMonth    = input(title="End Month",      type=input.integer, defval=12,      minval=1,       maxval=12)
-endYear     = input(title="End Year",       type=input.integer, defval=2012,    minval=1970,    maxval=2100)
+endDate     = input(title="End Date",       type=input.integer, defval=31,      minval=1,       maxval=31,      group="General User Inputs")
+endMonth    = input(title="End Month",      type=input.integer, defval=12,      minval=1,       maxval=12,      group="General User Inputs")
+endYear     = input(title="End Year",       type=input.integer, defval=2012,    minval=1970,    maxval=2100,    group="General User Inputs")
 // Look if the close time of the current bar falls inside the date range
 inDateRange = (time >= timestamp(syminfo.timezone, startYear, startMonth, startDate, 0, 0)) and (time < timestamp(syminfo.timezone, endYear, endMonth, endDate, 0, 0))
-date_range  = input(false,  title="Use the date range above to mark the Candlestick Setups?")
+date_range  = input(false,  title="Use the date range above to mark the Candlestick Setups?",                   group="General User Inputs")
 
 
 // WICK REVERSAL SETUP 
 //==============================================================================
 // Inputs
-enable_wick_reversal_setup  = input(true,       type=input.bool,                                    title="Enable Wick Reversal Setup")
-wick_reversal_shape         = input("Triangle", options=["Circle", "Triangle", "Cross", "Diamond"], title="Wick Reversal Marker")
-wick_reversal_marker_color  = input(color.blue, type = input.color,                                 title="Wick Reversal Marker Color")
-wick2bodyRatio              = input(2.5,        type=input.float,   minval=1, maxval=5,             title="Wick to Body Ratio" )
-closePercentage             = input(35,         type=input.integer, minval=1, maxval=99,            title="Top and Bottom Bar Close Percentage" )
+enable_wick_reversal_setup  = input(true,           type=input.bool,                                    title="Enable Wick Reversal Setup",             group="Wick Reversal Setup")
+wick_reversal_shape         = input("Circle",       options=["Circle", "Triangle", "Cross", "Diamond"], title="Wick Reversal Marker",                   group="Wick Reversal Setup")
+bullish_wick_marker_color   = input(color.green,    type = input.color,                                 title="Bullish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+bearish_wick_marker_color   = input(color.red,      type = input.color,                                 title="Bearish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+wick2bodyRatio              = input(2.5,            type=input.float,   minval=1, maxval=5,             title="Wick to Body Ratio" ,                    group="Wick Reversal Setup")
+closePercentage             = input(35,             type=input.integer, minval=1, maxval=99,            title="Top and Bottom Bar Close Percentage" ,   group="Wick Reversal Setup")
 
 
 // Wick Reversal Setup Markers 
@@ -61,9 +62,10 @@ close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_perce
 if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
     if enable_wick_reversal_setup == true               // Plot only if the user wants to plot the Wick Reversal Setups on the chart 
         if close_bullish == true                        // A bullish wick reversal was found 
-            label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=wick_reversal_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
+            label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
         else if close_bearish == true                        // A bearish wick reversal was found 
-            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=wick_reversal_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
+            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
+
 
 //==============================================================================
 // Debugging
