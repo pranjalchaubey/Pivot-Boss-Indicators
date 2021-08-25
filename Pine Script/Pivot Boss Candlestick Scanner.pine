@@ -3,7 +3,7 @@
 // © pranjalchaubey
 
 //Structural Pivots
-study(title="[CP]Pivot Boss Candlestick Scanner", shorttitle="[CP]PBCSS", overlay=true, max_labels_count=500)
+study(title="[CP]Pivot Boss Candlestick Scanner", shorttitle="[CP]Pivot Boss Candlesticks", overlay=true, max_labels_count=500)
 
 
 // General User Inputs 
@@ -67,7 +67,6 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
             label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
 
 
-//==============================================================================
 // Debugging
 //==============================================================================
 // plotchar(bar_body, "Bar Body", "", location = location.top, size=size.tiny, color=color.lime)
