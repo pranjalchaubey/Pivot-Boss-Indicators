@@ -91,7 +91,7 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
 //==============================================================================
 // Inputs
 enable_extreme_reversal_setup   = input(true,   type=input.bool,                            title="Enable Extreme Reversal Setup",                          group="Extreme Reversal Setup")
-lookback_period                 = input(13,     type=input.integer,                         title="Lookback Bars",                                          group="Extreme Reversal Setup")
+lookback_period                 = input(3,      type=input.integer,                         title="Lookback Bars",                                          group="Extreme Reversal Setup")
 trigger_bar_size                = input(2.0,    type=input.float,                           title="Trigger Bar Size compared to avg Lookback Bar Sizes",    group="Extreme Reversal Setup")
 trigger_bar_min_percent_cover   = input(50,     type=input.integer, maxval=80,              title="Trigger Bar Minimum Body Coverage Percentage",           group="Extreme Reversal Setup")
 trigger_bar_max_percent_cover   = input(85,     type=input.integer, minval=50, maxval=95,   title="Trigger Bar Maximum Body Coverage Percentage",           group="Extreme Reversal Setup")
