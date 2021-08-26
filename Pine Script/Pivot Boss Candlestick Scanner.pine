@@ -6,6 +6,15 @@
 study(title="[CP]Pivot Boss Candlestick Scanner", shorttitle="[CP]Pivot Boss Candlesticks", overlay=true, max_labels_count=500)
 
 
+// Hack to Prevent Indicator Repainting  
+//==============================================================================
+current_high    = high[barstate.isrealtime ? 1 : 0]      
+current_low     = low[barstate.isrealtime ? 1 : 0]       
+current_open    = open[barstate.isrealtime ? 1 : 0]
+current_close   = close[barstate.isrealtime ? 1 : 0]
+current_x       = barstate.isrealtime ? bar_index-1 : bar_index
+
+
 // General User Inputs 
 //==============================================================================
 // Set the date range
@@ -16,7 +25,7 @@ startYear   = input(title="Start Year",     type=input.integer, defval=2010,    
 endDate     = input(title="End Date",       type=input.integer, defval=31,      minval=1,       maxval=31,      group="General User Inputs")
 endMonth    = input(title="End Month",      type=input.integer, defval=12,      minval=1,       maxval=12,      group="General User Inputs")
 endYear     = input(title="End Year",       type=input.integer, defval=2012,    minval=1970,    maxval=2100,    group="General User Inputs")
-// Look if the close time of the current bar falls inside the date range
+// Look if the current_close time of the current bar falls inside the date range
 inDateRange = (time >= timestamp(syminfo.timezone, startYear, startMonth, startDate, 0, 0)) and (time < timestamp(syminfo.timezone, endYear, endMonth, endDate, 0, 0))
 date_range  = input(false,  title="Use the date range above to mark the Candlestick Setups?",                   group="General User Inputs")
 
@@ -48,11 +57,11 @@ else if wick_reversal_shape == "Diamond"
 
 // Calculations 
 actual_close_percentage = closePercentage / 100 
-bar_body = abs(open - close)
-wick_length = (open - close) <= 0 ? (high - close) + (open - low) : (high - open) + (close - low)
+bar_body = abs(current_open - current_close)
+wick_length = (current_open - current_close) <= 0 ? (current_high - current_close) + (current_open - current_low) : (current_high - current_open) + (current_close - current_low)
 actual_wick_to_body_ratio = wick_length / bar_body
-bar_range = abs(high - low)
-bull_close_percentage = (high - close)/bar_range
+bar_range = abs(current_high - current_low)
+bull_close_percentage = (current_high - current_close)/bar_range
 bear_close_percentage = 1 - bull_close_percentage
 close_bullish = actual_wick_to_body_ratio >= wick2bodyRatio and bull_close_percentage <= actual_close_percentage ? true : false 
 close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_percentage <= actual_close_percentage ? true : false 
@@ -62,9 +71,9 @@ close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_perce
 if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
     if enable_wick_reversal_setup == true               // Plot only if the user wants to plot the Wick Reversal Setups on the chart 
         if close_bullish == true                        // A bullish wick reversal was found 
-            label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
+            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
         else if close_bearish == true                        // A bearish wick reversal was found 
-            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
+            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
 
 
 // Debugging
@@ -78,3 +87,36 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
 // plotchar(close_bearish, "Bear", "", location = location.top, size=size.tiny, color=color.yellow)
 
 
+// EXTREME REVERSAL SETUP 
+//==============================================================================
+// Inputs
+enable_extreme_reversal_setup   = input(true,   type=input.bool,                            title="Enable Extreme Reversal Setup",                          group="Extreme Reversal Setup")
+lookback_period                 = input(13,     type=input.integer,                         title="Lookback Bars",                                          group="Extreme Reversal Setup")
+trigger_bar_size                = input(2.0,    type=input.float,                           title="Trigger Bar Size compared to avg Lookback Bar Sizes",    group="Extreme Reversal Setup")
+trigger_bar_min_percent_cover   = input(50,     type=input.integer, maxval=80,              title="Trigger Bar Minimum Body Coverage Percentage",           group="Extreme Reversal Setup")
+trigger_bar_max_percent_cover   = input(85,     type=input.integer, minval=50, maxval=95,   title="Trigger Bar Maximum Body Coverage Percentage",           group="Extreme Reversal Setup")
+extreme_reversal_shape          = input("Cross", options=["Circle", "Triangle", "Cross", "Diamond"], title="Extreme Wick Reversal Marker",                  group="Extreme Reversal Setup")
+bullish_extreme_marker_color    = input(color.green,    type = input.color,                          title="Bullish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
+bearish_extreme_marker_color    = input(color.red,      type = input.color,                          title="Bearish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
+
+
+// Extreme Reversal Setup Markers 
+bullish_extreme_reversal_marker = label.style_circle
+bearish_extreme_reversal_marker = label.style_circle
+if extreme_reversal_shape == "Triangle"
+    bullish_extreme_reversal_marker := label.style_triangleup
+    bearish_extreme_reversal_marker := label.style_triangledown
+else if extreme_reversal_shape == "Cross"
+    bullish_extreme_reversal_marker := label.style_xcross
+    bearish_extreme_reversal_marker := label.style_xcross
+else if extreme_reversal_shape == "Diamond"
+    bullish_extreme_reversal_marker := label.style_diamond
+    bearish_extreme_reversal_marker := label.style_diamond
+
+
+// Calculations 
+
+
+// Debugging
+//==============================================================================
+plotchar(sum(current_high, 2), "Sum", "", location = location.top, size=size.tiny, color=color.lime)
