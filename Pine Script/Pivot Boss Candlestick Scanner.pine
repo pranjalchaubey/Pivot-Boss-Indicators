@@ -35,8 +35,8 @@ date_range  = input(false,  title="Use the date range above to mark the Candlest
 // Inputs
 enable_wick_reversal_setup  = input(true,           type=input.bool,                                    title="Enable Wick Reversal Setup",             group="Wick Reversal Setup")
 wick_reversal_shape         = input("Circle",       options=["Circle", "Triangle", "Cross", "Diamond"], title="Wick Reversal Marker",                   group="Wick Reversal Setup")
-bullish_wick_marker_color   = input(color.green,    type = input.color,                                 title="Bullish Wick Reversal Marker Color",     group="Wick Reversal Setup")
-bearish_wick_marker_color   = input(color.red,      type = input.color,                                 title="Bearish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+bullish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bullish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+bearish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bearish Wick Reversal Marker Color",     group="Wick Reversal Setup")
 wick2bodyRatio              = input(2.5,            type=input.float,   minval=1, maxval=5,             title="Wick to Body Ratio" ,                    group="Wick Reversal Setup")
 closePercentage             = input(35,             type=input.integer, minval=1, maxval=99,            title="Top and Bottom Bar Close Percentage" ,   group="Wick Reversal Setup")
 
@@ -96,8 +96,8 @@ trigger_bar_size                = input(2.0,    type=input.float,               
 trigger_bar_min_percent_cover   = input(50,     type=input.integer, maxval=80,              title="Trigger Bar Minimum Body Coverage Percentage",           group="Extreme Reversal Setup")
 trigger_bar_max_percent_cover   = input(85,     type=input.integer, minval=50, maxval=95,   title="Trigger Bar Maximum Body Coverage Percentage",           group="Extreme Reversal Setup")
 extreme_reversal_shape          = input("Cross", options=["Circle", "Triangle", "Cross", "Diamond"], title="Extreme Wick Reversal Marker",                  group="Extreme Reversal Setup")
-bullish_extreme_marker_color    = input(color.green,    type = input.color,                          title="Bullish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
-bearish_extreme_marker_color    = input(color.red,      type = input.color,                          title="Bearish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
+bullish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bullish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
+bearish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bearish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
 
 
 // Extreme Reversal Setup Markers 
@@ -114,9 +114,28 @@ else if extreme_reversal_shape == "Diamond"
     bearish_extreme_reversal_marker := label.style_diamond
 
 
-// Calculations 
+// Calculations - We assume that we are standing on the second bar of this pattern 
+lookback_period_avg_range = sum(high - low, lookback_period)[2]/lookback_period     // [2] as we will compare the avg range with the candle BEFORE the current candle 
+norepaint_lookback_period_avg_range = barstate.isrealtime ? lookback_period_avg_range[1] : lookback_period_avg_range     // Fix Repainting 
+trigger_bar_body = abs(current_open[1] - current_close[1])
+actual_bar_body_coverage = (trigger_bar_body/(current_high[1] - current_low[1])) * 100 
+size_condition = trigger_bar_body > trigger_bar_size * norepaint_lookback_period_avg_range
+bar_body_coverage_condition = actual_bar_body_coverage > trigger_bar_min_percent_cover and actual_bar_body_coverage < trigger_bar_max_percent_cover
+bullish_bar_after_trigger_bar_condition = (current_close[1] < current_open[1]) and (current_close > current_open)
+bearish_bar_after_trigger_bar_condition = (current_close[1] > current_open[1]) and (current_close < current_open) 
+bullish_extreme_reversal = size_condition and bar_body_coverage_condition and bullish_bar_after_trigger_bar_condition
+bearish_extreme_reversal = size_condition and bar_body_coverage_condition and bearish_bar_after_trigger_bar_condition
+
+
+// Plots
+if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
+    if enable_extreme_reversal_setup == true            // Plot only if the user wants to plot the Extreme Reversal Setups on the chart 
+        if bullish_extreme_reversal == true             // A bullish extreme reversal was found 
+            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_extreme_marker_color, style=bullish_extreme_reversal_marker, size=size.auto, tooltip="Bullish Extreme Reversal Setup")
+        else if bearish_extreme_reversal == true        // A bearish extreme reversal was found 
+            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_extreme_marker_color, style=bearish_extreme_reversal_marker, size=size.auto, tooltip="Bearish Extreme Reversal Setup")
 
 
 // Debugging
 //==============================================================================
-plotchar(sum(current_high, 2), "Sum", "", location = location.top, size=size.tiny, color=color.lime)
+// plotchar(lookback_period_avg_range, "Avg Range", "", location = location.top, size=size.tiny, color=color.lime)
