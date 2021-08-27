@@ -139,3 +139,46 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
 // Debugging
 //==============================================================================
 // plotchar(lookback_period_avg_range, "Avg Range", "", location = location.top, size=size.tiny, color=color.lime)
+
+
+// OUTSIDE REVERSAL SETUP 
+//==============================================================================
+// Inputs
+enable_outside_reversal_setup   = input(true,   type=input.bool,                                        title="Enable Outside Reversal Setup",                      group="Outside Reversal Setup")
+outside_lookback_period         = input(12,      type=input.integer,                                     title="Lookback Bars",                                      group="Outside Reversal Setup")
+engulfing_bar_size_factor       = input(1.25,   type=input.float, minval=1,                             title="Engulfing Bar Size compared to Average Bar Size",    group="Outside Reversal Setup")
+outside_reversal_shape          = input("Diamond", options=["Circle", "Triangle", "Cross", "Diamond"],  title="Outside Reversal Marker",                            group="Outside Reversal Setup")
+bullish_outside_marker_color    = input(color.yellow,     type = input.color,                           title="Bullish Outside Reversal Marker Color",              group="Outside Reversal Setup")
+bearish_outside_marker_color    = input(color.yellow,     type = input.color,                           title="Bearish Outside Reversal Marker Color",              group="Outside Reversal Setup")
+
+
+// Outside Reversal Setup Markers 
+bullish_outside_reversal_marker = label.style_circle
+bearish_outside_reversal_marker = label.style_circle
+if outside_reversal_shape == "Triangle"
+    bullish_outside_reversal_marker := label.style_triangleup
+    bearish_outside_reversal_marker := label.style_triangledown
+else if outside_reversal_shape == "Cross"
+    bullish_outside_reversal_marker := label.style_xcross
+    bearish_outside_reversal_marker := label.style_xcross
+else if outside_reversal_shape == "Diamond"
+    bullish_outside_reversal_marker := label.style_diamond
+    bearish_outside_reversal_marker := label.style_diamond
+
+
+// Calculations - We assume that we are standing on the engulfing bar of this pattern
+outside_lookback_period_avg_range = sum(high - low, outside_lookback_period)[1]/outside_lookback_period     // [1] as we will compare the avg range BEFORE the current candle 
+norepaint_outside_lookback_period_avg_range = barstate.isrealtime ? outside_lookback_period_avg_range[1] : outside_lookback_period_avg_range     // Fix Repainting 
+engulfing_bar_body = current_high - current_low
+outside_size_condition = engulfing_bar_body >= engulfing_bar_size_factor * norepaint_outside_lookback_period_avg_range
+bullish_outside_reversal = outside_size_condition and (current_low < current_low[1]) and (current_close > current_high[1])
+bearish_outside_reversal = outside_size_condition and (current_high > current_high[1]) and (current_close < current_low[1])
+
+
+// Plots
+if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
+    if enable_outside_reversal_setup == true            // Plot only if the user wants to plot the Outside Reversal Setups on the chart 
+        if bullish_outside_reversal == true             // A bullish outside reversal was found 
+            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_outside_marker_color, style=bullish_outside_reversal_marker, size=size.auto, tooltip="Bullish Outside Reversal Setup")
+        else if bearish_outside_reversal == true        // A bearish outside reversal was found 
+            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_outside_marker_color, style=bearish_outside_reversal_marker, size=size.auto, tooltip="Bearish Outside Reversal Setup")
