@@ -63,6 +63,9 @@ actual_wick_to_body_ratio = wick_length / bar_body
 bar_range = abs(current_high - current_low)
 bull_close_percentage = (current_high - current_close)/bar_range
 bear_close_percentage = 1 - bull_close_percentage
+
+
+// Logic
 close_bullish = actual_wick_to_body_ratio >= wick2bodyRatio and bull_close_percentage <= actual_close_percentage ? true : false 
 close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_percentage <= actual_close_percentage ? true : false 
 
@@ -119,6 +122,9 @@ lookback_period_avg_range = sum(high - low, lookback_period)[2]/lookback_period 
 norepaint_lookback_period_avg_range = barstate.isrealtime ? lookback_period_avg_range[1] : lookback_period_avg_range     // Fix Repainting 
 trigger_bar_body = abs(current_open[1] - current_close[1])
 actual_bar_body_coverage = (trigger_bar_body/(current_high[1] - current_low[1])) * 100 
+
+
+// Logic
 size_condition = trigger_bar_body > trigger_bar_size * norepaint_lookback_period_avg_range
 bar_body_coverage_condition = actual_bar_body_coverage > trigger_bar_min_percent_cover and actual_bar_body_coverage < trigger_bar_max_percent_cover
 bullish_bar_after_trigger_bar_condition = (current_close[1] < current_open[1]) and (current_close > current_open)
@@ -170,6 +176,9 @@ else if outside_reversal_shape == "Diamond"
 outside_lookback_period_avg_range = sum(high - low, outside_lookback_period)[1]/outside_lookback_period     // [1] as we will compare the avg range BEFORE the current candle 
 norepaint_outside_lookback_period_avg_range = barstate.isrealtime ? outside_lookback_period_avg_range[1] : outside_lookback_period_avg_range     // Fix Repainting 
 engulfing_bar_body = current_high - current_low
+
+
+// Logic
 outside_size_condition = engulfing_bar_body >= engulfing_bar_size_factor * norepaint_outside_lookback_period_avg_range
 bullish_outside_reversal = outside_size_condition and (current_low < current_low[1]) and (current_close > current_high[1])
 bearish_outside_reversal = outside_size_condition and (current_high > current_high[1]) and (current_close < current_low[1])
