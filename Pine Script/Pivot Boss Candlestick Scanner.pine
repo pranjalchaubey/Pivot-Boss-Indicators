@@ -218,3 +218,22 @@ else if doji_reversal_shape == "Diamond"
     bearish_doji_reversal_marker := label.style_diamond
 
 
+// Calculations - We assume that we are standing on the trigger bar (1 OR 2 bars after the doji) of the setup and then we look back 
+moving_average = sma(current_close, doji_sma_lookback_period)
+prev_bar_body_percent = (abs(current_open[1] - current_close[1])/(current_high[1] - current_low[1])) * 100 
+prev_prev_bar_body_percent = (abs(current_open[2] - current_close[2])/(current_high[2] - current_low[2])) * 100 
+
+// Logic 
+prev_bar_doji = prev_bar_body_percent <= doji_bar_size
+prev_prev_bar_doji = prev_prev_bar_body_percent <= doji_bar_size
+bullish_doji_reversal = (prev_bar_doji and (current_high[1] < moving_average[1]) and (current_close > current_high[1])) or (prev_prev_bar_doji and (current_high[2] < moving_average[2]) and (current_close > current_high[2]))     // Bullish Doji Reversal 
+bearish_doji_reversal = (prev_bar_doji and (current_low[1]  > moving_average[1]) and (current_close < current_low[1]))  or (prev_prev_bar_doji and (current_low[2]  > moving_average[2]) and (current_close < current_low[2]))      // Bearish Doji Reversal 
+
+
+// Plots
+if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
+    if enable_doji_reversal_setup == true               // Plot only if the user wants to plot the Doji Reversal Setups on the chart 
+        if bullish_doji_reversal == true             // A bullish doji reversal was found 
+            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_doji_marker_color, style=bullish_doji_reversal_marker, size=size.auto, tooltip="Bullish Doji Reversal Setup")
+        else if bearish_doji_reversal == true        // A bearish doji reversal was found 
+            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_doji_marker_color, style=bearish_doji_reversal_marker, size=size.auto, tooltip="Bearish Doji Reversal Setup")
