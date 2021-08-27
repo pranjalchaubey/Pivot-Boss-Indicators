@@ -151,7 +151,7 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
 //==============================================================================
 // Inputs
 enable_outside_reversal_setup   = input(true,   type=input.bool,                                        title="Enable Outside Reversal Setup",                      group="Outside Reversal Setup")
-outside_lookback_period         = input(12,      type=input.integer,                                     title="Lookback Bars",                                      group="Outside Reversal Setup")
+outside_lookback_period         = input(12,     type=input.integer,                                     title="Lookback Bars",                                      group="Outside Reversal Setup")
 engulfing_bar_size_factor       = input(1.25,   type=input.float, minval=1,                             title="Engulfing Bar Size compared to Average Bar Size",    group="Outside Reversal Setup")
 outside_reversal_shape          = input("Diamond", options=["Circle", "Triangle", "Cross", "Diamond"],  title="Outside Reversal Marker",                            group="Outside Reversal Setup")
 bullish_outside_marker_color    = input(color.yellow,     type = input.color,                           title="Bullish Outside Reversal Marker Color",              group="Outside Reversal Setup")
@@ -191,3 +191,30 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
             label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_outside_marker_color, style=bullish_outside_reversal_marker, size=size.auto, tooltip="Bullish Outside Reversal Setup")
         else if bearish_outside_reversal == true        // A bearish outside reversal was found 
             label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_outside_marker_color, style=bearish_outside_reversal_marker, size=size.auto, tooltip="Bearish Outside Reversal Setup")
+
+
+// DOJI REVERSAL SETUP 
+//==============================================================================
+// Inputs
+enable_doji_reversal_setup      = input(true,   type=input.bool,                                        title="Enable Doji Reversal Setup",         group="Doji Reversal Setup")
+doji_sma_lookback_period        = input(10,     type=input.integer,                                     title="Doji SMA Lookback Period",           group="Doji Reversal Setup")
+doji_bar_size                   = input(10,     type=input.float, minval=1,                             title="Doji Body Coverage Percentage",      group="Doji Reversal Setup")
+doji_reversal_shape             = input("Triangle", options=["Circle", "Triangle", "Cross", "Diamond"], title="Doji Reversal Marker",               group="Doji Reversal Setup")
+bullish_doji_marker_color       = input(color.aqua,     type = input.color,                             title="Bullish Doji Reversal Marker Color", group="Doji Reversal Setup")
+bearish_doji_marker_color       = input(color.aqua,     type = input.color,                             title="Bearish Doji Reversal Marker Color", group="Doji Reversal Setup")
+
+
+// Doji Reversal Setup Markers 
+bullish_doji_reversal_marker = label.style_circle
+bearish_doji_reversal_marker = label.style_circle
+if doji_reversal_shape == "Triangle"
+    bullish_doji_reversal_marker := label.style_triangleup
+    bearish_doji_reversal_marker := label.style_triangledown
+else if doji_reversal_shape == "Cross"
+    bullish_doji_reversal_marker := label.style_xcross
+    bearish_doji_reversal_marker := label.style_xcross
+else if doji_reversal_shape == "Diamond"
+    bullish_doji_reversal_marker := label.style_diamond
+    bearish_doji_reversal_marker := label.style_diamond
+
+
