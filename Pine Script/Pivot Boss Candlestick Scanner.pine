@@ -38,9 +38,9 @@ lookback_period                 = input(3,      type=input.integer,             
 trigger_bar_size                = input(2.0,    type=input.float,                           title="Trigger Bar Size compared to avg Lookback Bar Sizes",    group="Extreme Reversal Setup")
 trigger_bar_min_percent_cover   = input(50,     type=input.integer, maxval=80,              title="Trigger Bar Minimum Body Coverage Percentage",           group="Extreme Reversal Setup")
 trigger_bar_max_percent_cover   = input(85,     type=input.integer, minval=50, maxval=95,   title="Trigger Bar Maximum Body Coverage Percentage",           group="Extreme Reversal Setup")
-extreme_reversal_shape          = input("Cross", options=["Circle", "Triangle", "Cross", "Diamond"], title="Extreme Wick Reversal Marker",                  group="Extreme Reversal Setup")
-bullish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bullish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
-bearish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bearish Wick Reversal Marker Color",            group="Extreme Reversal Setup")
+extreme_reversal_shape          = input("Cross", options=["Circle", "Triangle", "Cross", "Diamond"], title="Extreme Reversal Marker",                       group="Extreme Reversal Setup")
+bullish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bullish Extreme Reversal Marker Color",         group="Extreme Reversal Setup")
+bearish_extreme_marker_color    = input(color.blue,     type = input.color,                          title="Bearish Extreme Reversal Marker Color",         group="Extreme Reversal Setup")
 
 
 // Extreme Reversal Setup Markers 
@@ -220,7 +220,7 @@ actual_close_percentage = closePercentage / 100
 bar_body = abs(current_open - current_close)
 wick_length = (current_open - current_close) <= 0 ? (current_high - current_close) + (current_open - current_low) : (current_high - current_open) + (current_close - current_low)
 actual_wick_to_body_ratio = wick_length / bar_body
-bar_range = abs(current_high - current_low)
+bar_range = current_high - current_low
 bull_close_percentage = (current_high - current_close)/bar_range
 bear_close_percentage = 1 - bull_close_percentage
 
