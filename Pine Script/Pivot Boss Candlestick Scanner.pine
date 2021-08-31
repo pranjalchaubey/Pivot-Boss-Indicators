@@ -30,66 +30,6 @@ inDateRange = (time >= timestamp(syminfo.timezone, startYear, startMonth, startD
 date_range  = input(false,  title="Use the date range above to mark the Candlestick Setups?",                   group="General User Inputs")
 
 
-// WICK REVERSAL SETUP 
-//==============================================================================
-// Inputs
-enable_wick_reversal_setup  = input(true,           type=input.bool,                                    title="Enable Wick Reversal Setup",             group="Wick Reversal Setup")
-wick_reversal_shape         = input("Circle",       options=["Circle", "Triangle", "Cross", "Diamond"], title="Wick Reversal Marker",                   group="Wick Reversal Setup")
-bullish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bullish Wick Reversal Marker Color",     group="Wick Reversal Setup")
-bearish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bearish Wick Reversal Marker Color",     group="Wick Reversal Setup")
-wick2bodyRatio              = input(2.5,            type=input.float,   minval=1, maxval=5,             title="Wick to Body Ratio" ,                    group="Wick Reversal Setup")
-closePercentage             = input(35,             type=input.integer, minval=1, maxval=99,            title="Top and Bottom Bar Close Percentage" ,   group="Wick Reversal Setup")
-
-
-// Wick Reversal Setup Markers 
-bullish_wick_reversal_marker = label.style_circle
-bearish_wick_reversal_marker = label.style_circle
-if wick_reversal_shape == "Triangle"
-    bullish_wick_reversal_marker := label.style_triangleup
-    bearish_wick_reversal_marker := label.style_triangledown
-else if wick_reversal_shape == "Cross"
-    bullish_wick_reversal_marker := label.style_xcross
-    bearish_wick_reversal_marker := label.style_xcross
-else if wick_reversal_shape == "Diamond"
-    bullish_wick_reversal_marker := label.style_diamond
-    bearish_wick_reversal_marker := label.style_diamond
-
-
-// Calculations 
-actual_close_percentage = closePercentage / 100 
-bar_body = abs(current_open - current_close)
-wick_length = (current_open - current_close) <= 0 ? (current_high - current_close) + (current_open - current_low) : (current_high - current_open) + (current_close - current_low)
-actual_wick_to_body_ratio = wick_length / bar_body
-bar_range = abs(current_high - current_low)
-bull_close_percentage = (current_high - current_close)/bar_range
-bear_close_percentage = 1 - bull_close_percentage
-
-
-// Logic
-close_bullish = actual_wick_to_body_ratio >= wick2bodyRatio and bull_close_percentage <= actual_close_percentage ? true : false 
-close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_percentage <= actual_close_percentage ? true : false 
-
-
-// Plots
-if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
-    if enable_wick_reversal_setup == true               // Plot only if the user wants to plot the Wick Reversal Setups on the chart 
-        if close_bullish == true                        // A bullish wick reversal was found 
-            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
-        else if close_bearish == true                        // A bearish wick reversal was found 
-            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
-
-
-// Debugging
-//==============================================================================
-// plotchar(bar_body, "Bar Body", "", location = location.top, size=size.tiny, color=color.lime)
-// plotchar(wick_length, "Wick Length", "", location = location.top, size=size.tiny, color=color.lime)
-// plotchar(actual_wick_to_body_ratio, "Wick2Body", "", location = location.top, size=size.tiny, color=color.lime)
-// plotchar(bull_close_percentage, "Bull %age", "", location = location.top, size=size.tiny, color=color.green)
-// plotchar(bear_close_percentage, "Bear %age", "", location = location.top, size=size.tiny, color=color.red)
-// plotchar(close_bullish, "Bull", "", location = location.top, size=size.tiny, color=color.yellow)
-// plotchar(close_bearish, "Bear", "", location = location.top, size=size.tiny, color=color.yellow)
-
-
 // EXTREME REVERSAL SETUP 
 //==============================================================================
 // Inputs
@@ -248,3 +188,63 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
 // plotchar(prev_bar_doji, "Prev Doji", "", location = location.top, size=size.tiny, color=color.lime)
 // plotchar(prev_prev_bar_doji, "Prev Prev Doji", "", location = location.top, size=size.tiny, color=color.lime)
 // plotchar(bars_since_bullish_doji, "Since Bullish", "", location = location.top, size=size.tiny, color=color.lime)
+
+
+// WICK REVERSAL SETUP 
+//==============================================================================
+// Inputs
+enable_wick_reversal_setup  = input(true,           type=input.bool,                                    title="Enable Wick Reversal Setup",             group="Wick Reversal Setup")
+wick_reversal_shape         = input("Circle",       options=["Circle", "Triangle", "Cross", "Diamond"], title="Wick Reversal Marker",                   group="Wick Reversal Setup")
+bullish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bullish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+bearish_wick_marker_color   = input(color.white,    type = input.color,                                 title="Bearish Wick Reversal Marker Color",     group="Wick Reversal Setup")
+wick2bodyRatio              = input(2.5,            type=input.float,   minval=1, maxval=5,             title="Wick to Body Ratio" ,                    group="Wick Reversal Setup")
+closePercentage             = input(35,             type=input.integer, minval=1, maxval=99,            title="Top and Bottom Bar Close Percentage" ,   group="Wick Reversal Setup")
+
+
+// Wick Reversal Setup Markers 
+bullish_wick_reversal_marker = label.style_circle
+bearish_wick_reversal_marker = label.style_circle
+if wick_reversal_shape == "Triangle"
+    bullish_wick_reversal_marker := label.style_triangleup
+    bearish_wick_reversal_marker := label.style_triangledown
+else if wick_reversal_shape == "Cross"
+    bullish_wick_reversal_marker := label.style_xcross
+    bearish_wick_reversal_marker := label.style_xcross
+else if wick_reversal_shape == "Diamond"
+    bullish_wick_reversal_marker := label.style_diamond
+    bearish_wick_reversal_marker := label.style_diamond
+
+
+// Calculations 
+actual_close_percentage = closePercentage / 100 
+bar_body = abs(current_open - current_close)
+wick_length = (current_open - current_close) <= 0 ? (current_high - current_close) + (current_open - current_low) : (current_high - current_open) + (current_close - current_low)
+actual_wick_to_body_ratio = wick_length / bar_body
+bar_range = abs(current_high - current_low)
+bull_close_percentage = (current_high - current_close)/bar_range
+bear_close_percentage = 1 - bull_close_percentage
+
+
+// Logic
+close_bullish = actual_wick_to_body_ratio >= wick2bodyRatio and bull_close_percentage <= actual_close_percentage ? true : false 
+close_bearish = actual_wick_to_body_ratio >= wick2bodyRatio and bear_close_percentage <= actual_close_percentage ? true : false 
+
+
+// Plots
+if not(date_range == true and inDateRange == false)     // Plot only if the bar is in date range, or the feature has been turned off 
+    if enable_wick_reversal_setup == true               // Plot only if the user wants to plot the Wick Reversal Setups on the chart 
+        if close_bullish == true                        // A bullish wick reversal was found 
+            label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
+        else if close_bearish == true                        // A bearish wick reversal was found 
+            label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
+
+
+// Debugging
+//==============================================================================
+// plotchar(bar_body, "Bar Body", "", location = location.top, size=size.tiny, color=color.lime)
+// plotchar(wick_length, "Wick Length", "", location = location.top, size=size.tiny, color=color.lime)
+// plotchar(actual_wick_to_body_ratio, "Wick2Body", "", location = location.top, size=size.tiny, color=color.lime)
+// plotchar(bull_close_percentage, "Bull %age", "", location = location.top, size=size.tiny, color=color.green)
+// plotchar(bear_close_percentage, "Bear %age", "", location = location.top, size=size.tiny, color=color.red)
+// plotchar(close_bullish, "Bull", "", location = location.top, size=size.tiny, color=color.yellow)
+// plotchar(close_bearish, "Bear", "", location = location.top, size=size.tiny, color=color.yellow)
