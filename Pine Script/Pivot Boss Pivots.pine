@@ -1,0 +1,6 @@
+//@version=4
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © pranjalchaubey
+
+//Structural Pivots
+study(title="[CP]Pivot Boss Floor Pivots & Camarilla - Smart Assist and DPZ Detection", shorttitle="[CP]Pivot Boss Pivots", overlay=true, max_labels_count=500)
