@@ -2,5 +2,31 @@
 // This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
 // © pranjalchaubey
 
+// Credits 
+//==============================================================================
+// A large amount of code in this indicator was taken from Legendary Chris Moody's
+// "CM_Pivot Points_M-W-D_4H_1H_Filtered" Indicator
+
+//==============================================================================
+
+
 //Structural Pivots
 study(title="[CP]Pivot Boss Floor Pivots & Camarilla - Smart Assist and DPZ Detection", shorttitle="[CP]Pivot Boss Pivots", overlay=true, max_labels_count=500)
+
+
+// User Inputs 
+//==============================================================================
+show_floor_pivots       = input(true,   type=input.bool,                            title="Show Floor Pivots")
+show_cpr                = input(true,   type=input.bool,                            title="Show Central Pivot Range")
+show_smart_assist       = input(true,   type=input.bool,                            title="Show Smart Assist for Floor Pivots")
+show_cams               = input(true,   type=input.bool,                            title="Show Camarilla Pivots")
+show_hidden_cams        = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2")
+dynamic_pivot_levels    = input(true,   type=input.bool,                            title="Show Pivot Levels Dynamically")
+show_dpz                = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)")
+atr_threshold           = input(1,      type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection")
+show_daily_pivots       = input(true,   type=input.bool,                            title="Show Daily Pivots")
+show_weekly_pivots      = input(false,  type=input.bool,                            title="Show Weekly Pivots")
+show_monthly_pivots     = input(false,  type=input.bool,                            title="Show Monthly Pivots")
+show_yearly_pivots      = input(false,  type=input.bool,                            title="Show Yearly Pivots")
+
+
