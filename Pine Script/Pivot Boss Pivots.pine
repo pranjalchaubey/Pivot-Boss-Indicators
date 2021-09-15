@@ -6,7 +6,6 @@
 //==============================================================================
 // A large amount of code in this indicator was taken from Legendary Chris Moody's
 // "CM_Pivot Points_M-W-D_4H_1H_Filtered" Indicator
-
 //==============================================================================
 
 
@@ -23,10 +22,78 @@ show_cams               = input(true,   type=input.bool,                        
 show_hidden_cams        = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2")
 dynamic_pivot_levels    = input(true,   type=input.bool,                            title="Show Pivot Levels Dynamically")
 show_dpz                = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)")
-atr_threshold           = input(1,      type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection")
+atr_threshold           = input(1.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection")
+atr_period              = input(14,     type=input.integer,   minval=1, maxval=356, title="ATR Period")
 show_daily_pivots       = input(true,   type=input.bool,                            title="Show Daily Pivots")
 show_weekly_pivots      = input(false,  type=input.bool,                            title="Show Weekly Pivots")
 show_monthly_pivots     = input(false,  type=input.bool,                            title="Show Monthly Pivots")
 show_yearly_pivots      = input(false,  type=input.bool,                            title="Show Yearly Pivots")
 
+
+// Calculations  
+//==============================================================================
+// Floor Pivots 
+// Central Pivot 
+pivot = (high + low + close ) / 3.0
+// Resistance Levels 
+r1 = (2 * pivot) - low
+r2 = pivot + (high - low)
+r3 = r1 + (high - low)
+r4 = r3 + (r2 - r1) 
+// Support Levels 
+s1 = (2 * pivot) - high  
+s2 = pivot - (high - low) 
+s3 = s1 - (high - low) 
+s4 = s3 - (s1 - s2)
+// Central Pivot Range 
+temp_bc = (high + low) / 2 
+temp_tc = (pivot - temp_bc) + pivot 
+tc = temp_tc > temp_bc ? temp_tc : temp_bc
+bc = temp_bc < temp_tc ? temp_bc : temp_tc
+// The Camarilla Equation 
+cam_range = high - low 
+// Resistance Levels 
+h1 = close + (cam_range * 1.1/12) 
+h2 = close + (cam_range * 1.1/6) 
+h3 = close + (cam_range * 1.1/4) 
+h4 = close + (cam_range * 1.1/2)
+h5 = (high / low) * close 
+// Support Levels 
+l1 = close - (cam_range * 1.1/12)
+l2 = close - (cam_range * 1.1/6)
+l3 = close - (cam_range * 1.1/4)
+l4 = close - (cam_range * 1.1/2)
+l5 = close - (h5 - close)
+// Average True Range 
+dpz_atr = atr(atr_period) * atr_threshold
+
+// Daily Floor Pivots 
+daily_pivot = security(tickerid, 'D', pivot[1])
+daily_r1    = security(tickerid, 'D', r1[1]) 
+daily_r2    = security(tickerid, 'D', r2[1]) 
+daily_r3    = security(tickerid, 'D', r3[1]) 
+daily_r4    = security(tickerid, 'D', r4[1]) 
+daily_s1    = security(tickerid, 'D', s1[1]) 
+daily_s2    = security(tickerid, 'D', s2[1])
+daily_s3    = security(tickerid, 'D', s3[1])
+daily_s4    = security(tickerid, 'D', s4[1])
+daily_tbc   = security(tickerid, 'D', temp_bc)
+daily_ttc   = security(tickerid, 'D', temp_tc)
+daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
+daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
+
+// Daily Camarilla Pivots 
+daily_h1    = security(tickerid, 'D', h1[1])
+daily_h2    = security(tickerid, 'D', h2[1])
+daily_h3    = security(tickerid, 'D', h3[1])
+daily_h4    = security(tickerid, 'D', h4[1])
+daily_h5    = security(tickerid, 'D', h5[1])
+daily_l1    = security(tickerid, 'D', l1[1])
+daily_l2    = security(tickerid, 'D', l2[1])
+daily_l3    = security(tickerid, 'D', l3[1])
+daily_l4    = security(tickerid, 'D', l4[1])
+daily_l5    = security(tickerid, 'D', l5[1])
+
+// Daily Average True Range 
+daily_dpz_atr = security(tickerid, 'D', dpz_atr[1])
 
