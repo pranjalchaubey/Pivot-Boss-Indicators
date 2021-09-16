@@ -18,12 +18,16 @@ study(title="[CP]Pivot Boss Floor Pivots & Camarilla - Smart Assist and DPZ Dete
 show_floor_pivots       = input(true,   type=input.bool,                            title="Show Floor Pivots")
 show_cpr                = input(true,   type=input.bool,                            title="Show Central Pivot Range")
 show_smart_assist       = input(true,   type=input.bool,                            title="Show Smart Assist for Floor Pivots")
+
 show_cams               = input(true,   type=input.bool,                            title="Show Camarilla Pivots")
 show_hidden_cams        = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2")
+
 dynamic_pivot_levels    = input(true,   type=input.bool,                            title="Show Pivot Levels Dynamically")
+
 show_dpz                = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)")
 atr_threshold           = input(1.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection")
 atr_period              = input(14,     type=input.integer,   minval=1, maxval=356, title="ATR Period")
+
 show_daily_pivots       = input(true,   type=input.bool,                            title="Show Daily Pivots")
 show_weekly_pivots      = input(false,  type=input.bool,                            title="Show Weekly Pivots")
 show_monthly_pivots     = input(false,  type=input.bool,                            title="Show Monthly Pivots")
@@ -34,7 +38,7 @@ show_yearly_pivots      = input(false,  type=input.bool,                        
 //==============================================================================
 // Floor Pivots 
 // Central Pivot 
-pivot = (high + low + close ) / 3.0
+pivot = (high + low + close) / 3.0
 // Resistance Levels 
 r1 = (2 * pivot) - low
 r2 = pivot + (high - low)
@@ -68,32 +72,47 @@ l5 = close - (h5 - close)
 dpz_atr = atr(atr_period) * atr_threshold
 
 // Daily Floor Pivots 
-daily_pivot = security(tickerid, 'D', pivot[1])
-daily_r1    = security(tickerid, 'D', r1[1]) 
-daily_r2    = security(tickerid, 'D', r2[1]) 
-daily_r3    = security(tickerid, 'D', r3[1]) 
-daily_r4    = security(tickerid, 'D', r4[1]) 
-daily_s1    = security(tickerid, 'D', s1[1]) 
-daily_s2    = security(tickerid, 'D', s2[1])
-daily_s3    = security(tickerid, 'D', s3[1])
-daily_s4    = security(tickerid, 'D', s4[1])
-daily_tbc   = security(tickerid, 'D', temp_bc)
-daily_ttc   = security(tickerid, 'D', temp_tc)
+daily_pivot = security(syminfo.tickerid, 'D', pivot[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_r1    = security(syminfo.tickerid, 'D', r1[1],    barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r2    = security(syminfo.tickerid, 'D', r2[1],    barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r3    = security(syminfo.tickerid, 'D', r3[1],    barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r4    = security(syminfo.tickerid, 'D', r4[1],    barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s1    = security(syminfo.tickerid, 'D', s1[1],    barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s2    = security(syminfo.tickerid, 'D', s2[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_s3    = security(syminfo.tickerid, 'D', s3[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_s4    = security(syminfo.tickerid, 'D', s4[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_tbc   = security(syminfo.tickerid, 'D', temp_bc,  barmerge.gaps_off, barmerge.lookahead_on)
+daily_ttc   = security(syminfo.tickerid, 'D', temp_tc,  barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
 
 // Daily Camarilla Pivots 
-daily_h1    = security(tickerid, 'D', h1[1])
-daily_h2    = security(tickerid, 'D', h2[1])
-daily_h3    = security(tickerid, 'D', h3[1])
-daily_h4    = security(tickerid, 'D', h4[1])
-daily_h5    = security(tickerid, 'D', h5[1])
-daily_l1    = security(tickerid, 'D', l1[1])
-daily_l2    = security(tickerid, 'D', l2[1])
-daily_l3    = security(tickerid, 'D', l3[1])
-daily_l4    = security(tickerid, 'D', l4[1])
-daily_l5    = security(tickerid, 'D', l5[1])
+daily_h1    = security(syminfo.tickerid, 'D', h1[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_h2    = security(syminfo.tickerid, 'D', h2[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_h3    = security(syminfo.tickerid, 'D', h3[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_h4    = security(syminfo.tickerid, 'D', h4[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_h5    = security(syminfo.tickerid, 'D', h5[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_l1    = security(syminfo.tickerid, 'D', l1[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_l2    = security(syminfo.tickerid, 'D', l2[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_l3    = security(syminfo.tickerid, 'D', l3[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_l4    = security(syminfo.tickerid, 'D', l4[1], barmerge.gaps_off, barmerge.lookahead_on)
+daily_l5    = security(syminfo.tickerid, 'D', l5[1], barmerge.gaps_off, barmerge.lookahead_on)
 
 // Daily Average True Range 
-daily_dpz_atr = security(tickerid, 'D', dpz_atr[1])
+daily_dpz_atr = security(syminfo.tickerid, 'D', dpz_atr[1], barmerge.gaps_off, barmerge.lookahead_on)
 
+
+// Plots   
+//==============================================================================
+plot(show_floor_pivots and show_daily_pivots ? daily_pivot : na, color = color.blue, linewidth = 2, style = plot.style_line, transp = 0)
+// plot(islast ? r1 : na, title = "R1", color = color.red, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? r2 : na, title = "R2", color = color.red, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? r3 : na, title = "R3", color = color.red, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? r4 : na, title = "R4", color = color.red, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? s1 : na, title = "S1", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? s2 : na, title = "S2", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? s3 : na, title = "S3", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
+// plot(islast ? s4 : na, title = "S4", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
+// tcline = plot(islast ? tc : na, title = "TC", color = color.blue, linewidth = 1, style = plot.style_line, transp = 50)
+// bcline = plot(islast ? bc : na, title = "BC", color = color.blue, linewidth = 1, style = plot.style_line, transp = 50)
+// fill(tcline, bcline, color = color.blue, transp = 70)
