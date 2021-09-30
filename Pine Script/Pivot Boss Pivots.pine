@@ -71,6 +71,7 @@ l5 = close - (h5 - close)
 // Average True Range 
 dpz_atr = atr(atr_period) * atr_threshold
 
+
 // Daily Floor Pivots 
 daily_pivot = security(syminfo.tickerid, 'D', pivot[1], barmerge.gaps_off, barmerge.lookahead_on)
 daily_r1    = security(syminfo.tickerid, 'D', r1[1],    barmerge.gaps_off, barmerge.lookahead_on) 
@@ -81,8 +82,8 @@ daily_s1    = security(syminfo.tickerid, 'D', s1[1],    barmerge.gaps_off, barme
 daily_s2    = security(syminfo.tickerid, 'D', s2[1],    barmerge.gaps_off, barmerge.lookahead_on)
 daily_s3    = security(syminfo.tickerid, 'D', s3[1],    barmerge.gaps_off, barmerge.lookahead_on)
 daily_s4    = security(syminfo.tickerid, 'D', s4[1],    barmerge.gaps_off, barmerge.lookahead_on)
-daily_tbc   = security(syminfo.tickerid, 'D', temp_bc,  barmerge.gaps_off, barmerge.lookahead_on)
-daily_ttc   = security(syminfo.tickerid, 'D', temp_tc,  barmerge.gaps_off, barmerge.lookahead_on)
+daily_tbc   = security(syminfo.tickerid, 'D', temp_bc[1],  barmerge.gaps_off, barmerge.lookahead_on)
+daily_ttc   = security(syminfo.tickerid, 'D', temp_tc[1],  barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
 
@@ -104,25 +105,24 @@ daily_dpz_atr = security(syminfo.tickerid, 'D', dpz_atr[1], barmerge.gaps_off, b
 
 // Plots   
 //==============================================================================
-plot(show_floor_pivots and show_daily_pivots ? daily_pivot : na,    title = "Daily Pivot", color = color.blue,  linewidth = 2, style = plot.style_circles, show_last = 3)
-plot(show_floor_pivots and show_daily_pivots ? daily_r1 : na,       title = "R1",           color = color.red,  linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r2 : na,       title = "R2",           color = color.red,  linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r3 : na,       title = "R3",           color = color.red,  linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r4 : na,       title = "R4",           color = color.red,  linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s1 : na,       title = "S1",           color = color.lime, linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s2 : na,       title = "S2",           color = color.lime, linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s3 : na,       title = "S3",           color = color.lime, linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s4 : na,       title = "S4",           color = color.lime, linewidth = 2, style = plot.style_circles)
-// plot(islast ? s2 : na, title = "S2", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
-// plot(islast ? s3 : na, title = "S3", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
-// plot(islast ? s4 : na, title = "S4", color = color.lime, linewidth = 1, style = linestyle, transp = 0)
-// tcline = plot(islast ? tc : na, title = "TC", color = color.blue, linewidth = 1, style = plot.style_line, transp = 50)
-// bcline = plot(islast ? bc : na, title = "BC", color = color.blue, linewidth = 1, style = plot.style_line, transp = 50)
-// fill(tcline, bcline, color = color.blue, transp = 70)
+// Floor Pivots
+plot(show_floor_pivots and show_daily_pivots ? daily_pivot : na,    title = "Daily Pivot",  color = color.new(color.blue, 0),   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_r1 : na,       title = "R1",           color = color.new(color.red, 0),    linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_r2 : na,       title = "R2",           color = color.new(color.red, 0),    linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_r3 : na,       title = "R3",           color = color.new(color.red, 0),    linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_r4 : na,       title = "R4",           color = color.new(color.red, 0),    linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_s1 : na,       title = "S1",           color = color.new(color.lime, 0),   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_s2 : na,       title = "S2",           color = color.new(color.lime, 0),   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_s3 : na,       title = "S3",           color = color.new(color.lime, 0),   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots ? daily_s4 : na,       title = "S4",           color = color.new(color.lime, 0),   linewidth = 2, style = plot.style_circles)
+tcline = plot(show_cpr ? daily_tc : na,                             title = "TC",           color = color.new(color.blue, 50),  linewidth = 1, style = plot.style_line)
+bcline = plot(show_cpr ? daily_bc : na,                             title = "BC",           color = color.new(color.blue, 50),  linewidth = 1, style = plot.style_line)
+fill(tcline, bcline, color = color.new(color.blue, show_cpr ? 75 : 100))
+
 
 
 // Debugging
 //==============================================================================
-// plotchar(timeframe.period, "TimeFrame", "", location = location.top, size=size.tiny, color=color.lime)
-var label lbl_a = na, label.delete(lbl_a)
-lbl_a := label.new(bar_index - 2, high + high*0.005, text = "TimeFrame = " + timeframe.period, textalign = text.align_left)
+// plotchar(inRange, "In Range?", "", location = location.top, size=size.tiny, color=color.lime)
+// var label lbl_a = na, label.delete(lbl_a)
+// lbl_a := label.new(bar_index - 2, high + high*0.005, text = "TimeFrame = " + timeframe.period, textalign = text.align_left)
