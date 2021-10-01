@@ -26,6 +26,7 @@ floor_pivots_cpr_color  = input(color.new(color.blue, 50),  type = input.color, 
 show_cams               = input(true,   type=input.bool,                            title="Show Camarilla Pivots")
 show_hidden_cams        = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2")
 
+
 dynamic_pivot_levels    = input(true,   type=input.bool,                            title="Show Pivot Levels Dynamically")
 
 show_dpz                = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)")
@@ -121,7 +122,7 @@ plot(show_floor_pivots and show_daily_pivots ? daily_s3 : na,       title = "S3"
 plot(show_floor_pivots and show_daily_pivots ? daily_s4 : na,       title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
 tcline = plot(show_cpr ? daily_tc : na,                             title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 bcline = plot(show_cpr ? daily_bc : na,                             title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
-fill(tcline, bcline, color = color.new(color.blue, show_cpr ? 75 : 100))
+fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr ? 75 : 100))
 
 
 
