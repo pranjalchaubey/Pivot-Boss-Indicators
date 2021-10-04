@@ -15,28 +15,30 @@ study(title="[CP]Pivot Boss Floor Pivots & Camarilla - Smart Assist and DPZ Dete
 
 // User Inputs 
 //==============================================================================
-show_floor_pivots       = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
-show_cpr                = input(true,   type=input.bool,                            title="Show Central Pivot Range",                   group="Floor Pivots")
-dynamic_pivot_levels    = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivots")
-floor_pivots_p_color    = input(color.new(color.blue, 0),   type = input.color,     title="Central Floor Pivot Color",                  group="Floor Pivots")
-floor_pivots_r_color    = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels' Color",      group="Floor Pivots")
-floor_pivots_s_color    = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels' Color",         group="Floor Pivots")
-floor_pivots_cpr_color  = input(color.new(color.blue, 50),  type = input.color,     title="Floor Pivots CPR Band Color",                group="Floor Pivots")
+show_floor_pivots           = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
+show_cpr                    = input(true,   type=input.bool,                            title="Show Central Pivot Range",                   group="Floor Pivots")
+dynamic_pivot_levels        = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivots")
+dynamic_pivot_atr_period    = input(14,     type=input.integer,   minval=1, maxval=356, title="Dynamic Pivot ATR Period",                   group="Floor Pivots")
+dynamic_pivot_atr_threshold = input(2.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for Dynamic Floor Pivots",     group="Floor Pivots")
+floor_pivots_p_color        = input(color.new(color.blue, 0),   type = input.color,     title="Central Floor Pivot Color",                  group="Floor Pivots")
+floor_pivots_r_color        = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels' Color",      group="Floor Pivots")
+floor_pivots_s_color        = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels' Color",         group="Floor Pivots")
+floor_pivots_cpr_color      = input(color.new(color.blue, 50),  type = input.color,     title="Floor Pivots CPR Band Color",                group="Floor Pivots")
 
-show_cams               = input(true,   type=input.bool,                            title="Show Camarilla Pivots",                      group="The Camarilla Equation")
-show_hidden_cams        = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2",   group="The Camarilla Equation")
-dynamic_cams_levels     = input(true,   type=input.bool,                            title="Show Camarilla Levels Dynamically",          group="The Camarilla Equation")
-cams_h_color            = input(color.new(color.olive, 0),  type = input.color,     title="Camarilla H Layers' Color",                  group="The Camarilla Equation")
-cams_l_color            = input(color.new(color.yellow, 0), type = input.color,     title="Camarilla L Layers' Color",                  group="The Camarilla Equation")
+show_cams                   = input(true,   type=input.bool,                            title="Show Camarilla Pivots",                      group="The Camarilla Equation")
+show_hidden_cams            = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2",   group="The Camarilla Equation")
+dynamic_cams_levels         = input(true,   type=input.bool,                            title="Show Camarilla Levels Dynamically",          group="The Camarilla Equation")
+cams_h_color                = input(color.new(color.olive, 0),  type = input.color,     title="Camarilla H Layers' Color",                  group="The Camarilla Equation")
+cams_l_color                = input(color.new(color.yellow, 0), type = input.color,     title="Camarilla L Layers' Color",                  group="The Camarilla Equation")
 
-show_dpz                = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)",          group="Double Hot Pivot Zone Detection")
-atr_threshold           = input(1.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection",            group="Double Hot Pivot Zone Detection")
-atr_period              = input(14,     type=input.integer,   minval=1, maxval=356, title="ATR Period",                                 group="Double Hot Pivot Zone Detection")
+show_dpz                    = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)",          group="Double Hot Pivot Zone Detection")
+atr_threshold               = input(1.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection",            group="Double Hot Pivot Zone Detection")
+atr_period                  = input(14,     type=input.integer,   minval=1, maxval=356, title="ATR Period",                                 group="Double Hot Pivot Zone Detection")
 
-show_daily_pivots       = input(true,   type=input.bool,                            title="Show Daily Pivots",                          group="TimeFrames")
-show_weekly_pivots      = input(false,  type=input.bool,                            title="Show Weekly Pivots",                         group="TimeFrames")
-show_monthly_pivots     = input(false,  type=input.bool,                            title="Show Monthly Pivots",                        group="TimeFrames")
-show_yearly_pivots      = input(false,  type=input.bool,                            title="Show Yearly Pivots",                         group="TimeFrames")
+show_daily_pivots           = input(true,   type=input.bool,                            title="Show Daily Pivots",                          group="TimeFrames")
+show_weekly_pivots          = input(false,  type=input.bool,                            title="Show Weekly Pivots",                         group="TimeFrames")
+show_monthly_pivots         = input(false,  type=input.bool,                            title="Show Monthly Pivots",                        group="TimeFrames")
+show_yearly_pivots          = input(false,  type=input.bool,                            title="Show Yearly Pivots",                         group="TimeFrames")
 
 
 // Calculations  
@@ -59,6 +61,10 @@ temp_bc = (high + low) / 2
 temp_tc = (pivot - temp_bc) + pivot 
 tc = temp_tc > temp_bc ? temp_tc : temp_bc
 bc = temp_bc < temp_tc ? temp_bc : temp_tc
+// Dynamic Floor Pivots 
+dynamic_pivot_atr = atr(dynamic_pivot_atr_period) * dynamic_pivot_atr_threshold
+dynamic_high = high + dynamic_pivot_atr
+dynamic_low = low - dynamic_pivot_atr
 // The Camarilla Equation 
 cam_range = high - low 
 // Resistance Levels 
@@ -77,6 +83,18 @@ l5 = close - (h5 - close)
 dpz_atr = atr(atr_period) * atr_threshold
 
 
+// Dynamic Floor Pivot Variables 
+var bool show_daily_pivot   = na
+var bool show_daily_r1      = na
+var bool show_daily_r2      = na
+var bool show_daily_r3      = na
+var bool show_daily_r4      = na
+var bool show_daily_s1      = na
+var bool show_daily_s2      = na
+var bool show_daily_s3      = na
+var bool show_daily_s4      = na
+
+
 // Daily Floor Pivots 
 daily_pivot = security(syminfo.tickerid, 'D', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
 daily_r1    = security(syminfo.tickerid, 'D', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
@@ -91,6 +109,18 @@ daily_tbc   = security(syminfo.tickerid, 'D', temp_bc[1],   barmerge.gaps_off, b
 daily_ttc   = security(syminfo.tickerid, 'D', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
+
+// Dynamic Daily Floor Pivot Logic
+show_daily_pivot    := show_daily_pivot[1]  == false and dynamic_pivot_levels and ((daily_pivot  >= dynamic_low and daily_pivot  <= dynamic_high) or (daily_tc >= dynamic_low and daily_tc <= dynamic_high) or (daily_bc >= dynamic_low and daily_bc <= dynamic_high)) ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_pivot[1]  == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r1       := show_daily_r1[1]     == false and dynamic_pivot_levels and daily_r1       >= dynamic_low and daily_r1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r2       := show_daily_r2[1]     == false and dynamic_pivot_levels and daily_r2       >= dynamic_low and daily_r2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r3       := show_daily_r3[1]     == false and dynamic_pivot_levels and daily_r3       >= dynamic_low and daily_r3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r4       := show_daily_r4[1]     == false and dynamic_pivot_levels and daily_r4       >= dynamic_low and daily_r4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s1       := show_daily_s1[1]     == false and dynamic_pivot_levels and daily_s1       >= dynamic_low and daily_s1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s2       := show_daily_s2[1]     == false and dynamic_pivot_levels and daily_s2       >= dynamic_low and daily_s2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s3       := show_daily_s3[1]     == false and dynamic_pivot_levels and daily_s3       >= dynamic_low and daily_s3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s4       := show_daily_s4[1]     == false and dynamic_pivot_levels and daily_s4       >= dynamic_low and daily_s4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+
 
 // Daily Camarilla Pivots 
 daily_h1    = security(syminfo.tickerid, 'D', h1[1], barmerge.gaps_off, barmerge.lookahead_on)
@@ -111,18 +141,18 @@ daily_dpz_atr = security(syminfo.tickerid, 'D', dpz_atr[1], barmerge.gaps_off, b
 // Plots   
 //==============================================================================
 // Floor Pivots
-plot(show_floor_pivots and show_daily_pivots ? daily_pivot : na,            title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-tcline = plot(show_cpr ? daily_tc : na,                                     title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
-bcline = plot(show_cpr ? daily_bc : na,                                     title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
-fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr ? 75 : 100))
+plot(show_floor_pivots and show_daily_pivots and show_daily_pivot ? daily_pivot : na,            title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r1 ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r2 ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r3 ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r4 ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s1 ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s2 ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s3 ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s4 ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+tcline = plot(show_cpr and show_daily_pivot ? daily_tc : na,                                     title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
+bcline = plot(show_cpr and show_daily_pivot ? daily_bc : na,                                     title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
+fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100))
 
 // The Camarilla Equation 
 plot(show_cams and show_daily_pivots and show_hidden_cams ? daily_h1 : na,  title = "H1",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
@@ -138,6 +168,7 @@ plot(show_cams and show_daily_pivots ? daily_l5 : na,                       titl
 
 // Debugging
 //==============================================================================
-// plotchar(inRange, "In Range?", "", location = location.top, size=size.tiny, color=color.lime)
+plotchar(show_daily_pivot, "Show Daily Pivot", "", location = location.top, size=size.tiny, color=color.lime)
+plotchar(dayofmonth != dayofmonth[1], "Day of Month", "", location = location.top, size=size.tiny, color=color.lime)
 // var label lbl_a = na, label.delete(lbl_a)
 // lbl_a := label.new(bar_index - 2, high + high*0.005, text = "TimeFrame = " + timeframe.period, textalign = text.align_left)
