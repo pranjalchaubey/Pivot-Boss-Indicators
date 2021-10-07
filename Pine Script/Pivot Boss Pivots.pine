@@ -18,7 +18,7 @@ study(title="[CP]Pivot Boss Floor Pivots & Camarilla - Smart Assist and DPZ Dete
 show_floor_pivots           = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
 show_cpr                    = input(true,   type=input.bool,                            title="Show Central Pivot Range",                   group="Floor Pivots")
 dynamic_pivot_levels        = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivots")
-dynamic_pivot_atr_period    = input(14,     type=input.integer,   minval=1, maxval=356, title="Dynamic Pivot ATR Period",                   group="Floor Pivots")
+dynamic_pivot_atr_period    = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Floor Pivots")
 dynamic_pivot_atr_threshold = input(2.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for Dynamic Floor Pivots",     group="Floor Pivots")
 floor_pivots_p_color        = input(color.new(color.blue, 0),   type = input.color,     title="Central Floor Pivot Color",                  group="Floor Pivots")
 floor_pivots_r_color        = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels' Color",      group="Floor Pivots")
@@ -28,14 +28,18 @@ floor_pivots_cpr_color      = input(color.new(color.blue, 50),  type = input.col
 show_cams                   = input(true,   type=input.bool,                            title="Show Camarilla Pivots",                      group="The Camarilla Equation")
 show_hidden_cams            = input(false,  type=input.bool,                            title="Show Hidden Camarilla Layers H1 H2 L1 L2",   group="The Camarilla Equation")
 dynamic_cams_levels         = input(true,   type=input.bool,                            title="Show Camarilla Levels Dynamically",          group="The Camarilla Equation")
-dynamic_cams_atr_period     = input(14,     type=input.integer,   minval=1, maxval=356, title="Dynamic Camarilla Levels ATR Period",        group="The Camarilla Equation")
+dynamic_cams_atr_period     = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Camarilla Levels ATR Period",        group="The Camarilla Equation")
 dynamic_cams_atr_threshold  = input(2.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for Dynamic Camarilla Levels", group="The Camarilla Equation")
 cams_h_color                = input(color.new(color.olive, 0),  type = input.color,     title="Camarilla H Layers' Color",                  group="The Camarilla Equation")
 cams_l_color                = input(color.new(color.yellow, 0), type = input.color,     title="Camarilla L Layers' Color",                  group="The Camarilla Equation")
 
-show_dpz                    = input(true,   type=input.bool,                            title="Mark Double Hot Pivot Zones (DPZ)",          group="Double Hot Pivot Zone Detection")
-atr_threshold               = input(1.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection",            group="Double Hot Pivot Zone Detection")
-atr_period                  = input(14,     type=input.integer,   minval=1, maxval=356, title="ATR Period",                                 group="Double Hot Pivot Zone Detection")
+show_cams_dpz               = input(true,   type=input.bool,                            title="Daily TF Floor and Camarilla Pivots DPZ",    group="Double Hot Pivot Zone (DPZ) Detection")
+show_weekly_dpz             = input(false,  type=input.bool,                            title="Daily and Weekly TF Floor Pivots DPZ",       group="Double Hot Pivot Zone (DPZ) Detection")
+show_monthly_dpz            = input(false,  type=input.bool,                            title="Daily and Monthly TF Floor Pivots DPZ",      group="Double Hot Pivot Zone (DPZ) Detection")
+show_yearly_dpz             = input(false,  type=input.bool,                            title="Daily and Yearly TF Floor Pivots DPZ",       group="Double Hot Pivot Zone (DPZ) Detection")
+atr_threshold               = input(0.125,  type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for DPZ Detection",            group="Double Hot Pivot Zone (DPZ) Detection")
+atr_period                  = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="Double Hot Pivot Zone (DPZ) Detection")
+dpz_color                   = input(color.new(color.maroon, 75),type = input.color,     title="DPZ Marker Color",                           group="Double Hot Pivot Zone (DPZ) Detection")
 
 show_daily_pivots           = input(true,   type=input.bool,                            title="Show Daily Pivots",                          group="TimeFrames")
 show_weekly_pivots          = input(false,  type=input.bool,                            title="Show Weekly Pivots",                         group="TimeFrames")
@@ -85,7 +89,7 @@ l5 = close - (h5 - close)
 dynamic_cams_atr = atr(dynamic_cams_atr_period) * dynamic_cams_atr_threshold
 dynamic_cams_high = high + dynamic_cams_atr
 dynamic_cams_low = low - dynamic_cams_atr
-// Average True Range 
+// Average True Range for DPZ
 dpz_atr = atr(atr_period) * atr_threshold
 
 
@@ -112,6 +116,8 @@ var bool show_daily_l3      = na
 var bool show_daily_l4      = na
 var bool show_daily_l5      = na
 
+// Daily Average True Range 
+daily_dpz_atr = security(syminfo.tickerid, 'D', dpz_atr[1], barmerge.gaps_off, barmerge.lookahead_on)
 
 // Daily Floor Pivots 
 daily_pivot = security(syminfo.tickerid, 'D', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
@@ -165,37 +171,139 @@ show_daily_l4       := show_daily_l4[1]     == false and dynamic_cams_levels and
 show_daily_l5       := show_daily_l5[1]     == false and dynamic_cams_levels and daily_l5       >= dynamic_cams_low and daily_l5     <= dynamic_cams_high ? 1 : dynamic_cams_levels == false ? 1 : show_daily_l5[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
 
 
-// Daily Average True Range 
-daily_dpz_atr = security(syminfo.tickerid, 'D', dpz_atr[1], barmerge.gaps_off, barmerge.lookahead_on)
-
-
 // Plots   
 //==============================================================================
 // Floor Pivots
-plot(show_floor_pivots and show_daily_pivots and show_daily_pivot ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r1 ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r2 ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r3 ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r4 ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s1 ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s2 ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s3 ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s4 ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_pivot ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_r1 ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_r2 ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_r3 ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_r4 ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_s1 ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_s2 ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_s3 ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+// plot(show_floor_pivots and show_daily_pivots and show_daily_s4 ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+
+daily_pivot_line = plot(show_floor_pivots and show_daily_pivots and show_daily_pivot ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
+daily_r1_line = plot(show_floor_pivots and show_daily_pivots and show_daily_r1 ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+daily_r2_line = plot(show_floor_pivots and show_daily_pivots and show_daily_r2 ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+daily_r3_line = plot(show_floor_pivots and show_daily_pivots and show_daily_r3 ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+daily_r4_line = plot(show_floor_pivots and show_daily_pivots and show_daily_r4 ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+daily_s1_line = plot(show_floor_pivots and show_daily_pivots and show_daily_s1 ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+daily_s2_line = plot(show_floor_pivots and show_daily_pivots and show_daily_s2 ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+daily_s3_line = plot(show_floor_pivots and show_daily_pivots and show_daily_s3 ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+daily_s4_line = plot(show_floor_pivots and show_daily_pivots and show_daily_s4 ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
 tcline = plot(show_cpr and show_daily_pivot ? daily_tc : na,                                  title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 bcline = plot(show_cpr and show_daily_pivot ? daily_bc : na,                                  title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
-fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100))
+fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100), fillgaps = true)
 
 // The Camarilla Equation 
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h1 ? daily_h1 : na,  title = "H1",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h2 ? daily_h2 : na,  title = "H2",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_h3 ? daily_h3 : na,                       title = "H3",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_h4 ? daily_h4 : na,                       title = "H4",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_h5 ? daily_h5 : na,                       title = "H5",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l1 ? daily_l1 : na,  title = "L1",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l2 ? daily_l2 : na,  title = "L2",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_l3 ? daily_l3 : na,                       title = "L3",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_l4 ? daily_l4 : na,                       title = "L4",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_daily_l5 ? daily_l5 : na,                       title = "L5",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+
 plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h1 ? daily_h1 : na,  title = "H1",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
 plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h2 ? daily_h2 : na,  title = "H2",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_h3 ? daily_h3 : na,                       title = "H3",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_h4 ? daily_h4 : na,                       title = "H4",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_h5 ? daily_h5 : na,                       title = "H5",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+daily_h3_line = plot(show_cams and show_daily_pivots and show_daily_h3 ? daily_h3 : na,                       title = "H3",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+daily_h4_line = plot(show_cams and show_daily_pivots and show_daily_h4 ? daily_h4 : na,                       title = "H4",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+daily_h5_line = plot(show_cams and show_daily_pivots and show_daily_h5 ? daily_h5 : na,                       title = "H5",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
 plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l1 ? daily_l1 : na,  title = "L1",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
 plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l2 ? daily_l2 : na,  title = "L2",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_l3 ? daily_l3 : na,                       title = "L3",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_l4 ? daily_l4 : na,                       title = "L4",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
-plot(show_cams and show_daily_pivots and show_daily_l5 ? daily_l5 : na,                       title = "L5",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+daily_l3_line = plot(show_cams and show_daily_pivots and show_daily_l3 ? daily_l3 : na,                       title = "L3",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+daily_l4_line = plot(show_cams and show_daily_pivots and show_daily_l4 ? daily_l4 : na,                       title = "L4",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+daily_l5_line = plot(show_cams and show_daily_pivots and show_daily_l5 ? daily_l5 : na,                       title = "L5",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+
+
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h1 ? daily_h1 : na,  title = "H1",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_h2 ? daily_h2 : na,  title = "H2",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// daily_h3_line = plot(show_cams and show_daily_pivots and show_daily_h3 ? daily_h3 : na,                       title = "H3",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// daily_h4_line = plot(show_cams and show_daily_pivots and show_daily_h4 ? daily_h4 : na,                       title = "H4",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// daily_h5_line = plot(show_cams and show_daily_pivots and show_daily_h5 ? daily_h5 : na,                       title = "H5",           color = cams_h_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l1 ? daily_l1 : na,  title = "L1",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// plot(show_cams and show_daily_pivots and show_hidden_cams and show_daily_l2 ? daily_l2 : na,  title = "L2",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// daily_l3_line = plot(show_cams and show_daily_pivots and show_daily_l3 ? daily_l3 : na,                       title = "L3",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// daily_l4_line = plot(show_cams and show_daily_pivots and show_daily_l4 ? daily_l4 : na,                       title = "L4",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+// daily_l5_line = plot(show_cams and show_daily_pivots and show_daily_l5 ? daily_l5 : na,                       title = "L5",           color = cams_l_color,           linewidth = 1, style = plot.style_circles)
+
+
+// // DPZ between Floor Pivots and Camarilla Levels 
+if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h3) < daily_dpz_atr
+    fill(daily_pivot_line, daily_h3_line, color = color.new(dpz_color, 75))
+else if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h4) < daily_dpz_atr
+    fill(daily_pivot_line, daily_h4_line, color = color.new(dpz_color, 75))
+else if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h5) < daily_dpz_atr
+    fill(daily_pivot_line, daily_h5_line, color = color.new(dpz_color, 75))
+else if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l3) < daily_dpz_atr
+    fill(daily_pivot_line, daily_l3_line, color = color.new(dpz_color, 75))
+else if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l4) < daily_dpz_atr
+    fill(daily_pivot_line, daily_l4_line, color = color.new(dpz_color, 75))
+else if show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l5) < daily_dpz_atr
+    fill(daily_pivot_line, daily_l5_line, color = color.new(dpz_color, 75))
+
+// show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h3) < daily_dpz_atr ? fill(daily_pivot_line, daily_h3_line, color = color.new(dpz_color, 75)) : na
+// fill(daily_pivot_line, daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_pivot_line, daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_pivot_line, daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_pivot_line, daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_pivot_line, daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_pivot_line, daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_pivot - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r1_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r1    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r2_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r2    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r3_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r3    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_r4_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_r4    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s1_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s1    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s2_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s2    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s3_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s3    - daily_l5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_h3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_h3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_h4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_h4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_h5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_h5) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_l3_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_l3) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_l4_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_l4) < daily_dpz_atr ? 75 : 100))
+// fill(daily_s4_line   , daily_l5_line, color = color.new(dpz_color, show_cams_dpz and timeframe.isintraday and abs(daily_s4    - daily_l5) < daily_dpz_atr ? 75 : 100))
+
+
 
 // Debugging
 //==============================================================================
