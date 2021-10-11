@@ -10,7 +10,7 @@
 
 
 //Structural Pivots
-study(title="[CP]Pivot Boss Floor and Camarilla Pivots with ATR Normalization and Dynamic Levels", shorttitle="[CP]Pivot Boss Pivots", overlay=true, max_labels_count=500)
+study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", shorttitle="[CP]Pivot Boss Floor Pivots", overlay=true, max_labels_count=500)
 
 
 // User Inputs 
@@ -33,9 +33,9 @@ dynamic_cams_atr_threshold  = input(2.0,    type=input.float,   minval=0.1, maxv
 cams_h_color                = input(color.new(color.olive, 0),  type = input.color,     title="Camarilla H Layers' Color",                  group="The Camarilla Equation")
 cams_l_color                = input(color.new(color.yellow, 0), type = input.color,     title="Camarilla L Layers' Color",                  group="The Camarilla Equation")
 
-normalize_atr               = input(true,   type=input.bool,                            title="Use ATR to Normalize Intraday Pivot Levels", group="ATR Normalization")
-atr_multiplier              = input(0.125,  type=input.float,   minval=0.1, maxval=10,  title="ATR Multiplier",                             group="ATR Normalization")
-atr_period                  = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Normalization")
+atr_dilation                = input(true,   type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
+atr_multiplier              = input(0.125,  type=input.float,   minval=0.1, maxval=10,  title="ATR Multiplier",                             group="ATR Dilation")
+atr_period                  = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Dilation")
 
 show_daily_pivots           = input(true,   type=input.bool,                            title="Show Daily Pivots",                          group="TimeFrames")
 show_weekly_pivots          = input(false,  type=input.bool,                            title="Show Weekly Pivots",                         group="TimeFrames")
@@ -112,7 +112,7 @@ var bool show_daily_l3      = na
 var bool show_daily_l4      = na
 var bool show_daily_l5      = na
 
-// Daily Average True Range for ATR Normalization
+// Daily Average True Range for ATR Dilation
 daily_atr_norm = security(syminfo.tickerid, 'D', atr_norm[1], barmerge.gaps_off, barmerge.lookahead_on)
 
 // Daily Floor Pivots 
@@ -170,15 +170,15 @@ show_daily_l5       := show_daily_l5[1]     == false and dynamic_cams_levels and
 // Plots   
 //==============================================================================
 // Floor Pivots
-plot(show_floor_pivots and show_daily_pivots and show_daily_pivot ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r1 ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r2 ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r3 ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r4 ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s1 ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s2 ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s3 ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s4 ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_pivot and not atr_dilation ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r1 and not atr_dilation ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r2 and not atr_dilation ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r3 and not atr_dilation ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_r4 and not atr_dilation ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s1 and not atr_dilation ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s2 and not atr_dilation ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s3 and not atr_dilation ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_daily_pivots and show_daily_s4 and not atr_dilation ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
 tcline = plot(show_cpr and show_daily_pivot ? daily_tc : na,                                  title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 bcline = plot(show_cpr and show_daily_pivot ? daily_bc : na,                                  title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100), fillgaps = true)
