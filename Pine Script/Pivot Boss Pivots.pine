@@ -15,30 +15,34 @@ study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", 
 
 // User Inputs 
 //==============================================================================
-show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
-dynamic_pivot_levels            = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivots")
-dynamic_pivot_atr_period        = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Floor Pivots")
-dynamic_pivot_atr_threshold     = input(2.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for Dynamic Floor Pivots",     group="Floor Pivots")
-floor_pivots_p_color            = input(color.new(color.blue, 0),   type = input.color,     title="Central Floor Pivot Color",                  group="Floor Pivots")
-floor_pivots_r_color            = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels' Color",      group="Floor Pivots")
-floor_pivots_s_color            = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels' Color",         group="Floor Pivots")
 
-atr_dilation                    = input(true,   type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
-atr_multiplier                  = input(0.125,  type=input.float,   minval=0.1, maxval=10,  title="ATR Multiplier",                             group="ATR Dilation")
-atr_period                      = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Dilation")
+// floor_pivot_resolution          = input('D',    type=input.resolution,                      title="Floor Pivot Timeframe",                      group="Floor Pivot I")
+floor_pivot_timeframe           = input("D",    options=["D", "W", "M", "12M"],             title="Floor Pivot Timeframe",                      group="Floor Pivot I")
+show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivot I")
+show_cpr                        = input(true,   type=input.bool,                            title="Show CPR",                                   group="Floor Pivot I")
+dynamic_pivot_levels            = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivot I")
+dynamic_pivot_atr_period        = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Floor Pivot I")
+dynamic_pivot_atr_threshold     = input(2.0,    type=input.float,   minval=0.1, maxval=10,  title="ATR Threshold for Dynamic Floor Pivots",     group="Floor Pivot I")
+floor_pivots_p_color            = input(color.new(color.blue, 0),   type = input.color,     title="Central Floor Pivot Color",                  group="Floor Pivot I")
+floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="CPR Band Color",                             group="FLoor Pivot I")
+floor_pivots_r_color            = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels' Color",      group="Floor Pivot I")
+floor_pivots_s_color            = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels' Color",         group="Floor Pivot I")
+atr_dilation                    = input(true,   type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="Floor Pivot I")
+atr_multiplier                  = input(0.125,  type=input.float,   minval=0.1, maxval=10,  title="ATR Multiplier",                             group="Floor Pivot I")
+atr_period                      = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="Floor Pivot I")
 
-show_daily_pivots               = input(true,   type=input.bool,                            title="Daily Pivots",       inline="Daily",         group="TimeFrames")
-show_cpr                        = input(true,   type=input.bool,                            title="CPR",                inline="Daily",         group="TimeFrames")
-floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="Band Color",         inline="Daily",         group="TimeFrames")
-show_weekly_pivots              = input(false,  type=input.bool,                            title="Weekly Pivots",      inline="Weekly",        group="TimeFrames")
-show_weekly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Weekly",        group="TimeFrames")
-floor_pivots_weekly_cpr_color   = input(color.new(color.orange, 50),type = input.color,     title="Band Color",         inline="Weekly",        group="TimeFrames")
-show_monthly_pivots             = input(false,  type=input.bool,                            title="Monthly Pivots",     inline="Monthly",       group="TimeFrames")
-show_monthly_cpr                = input(true,   type=input.bool,                            title="CPR",                inline="Monthly",       group="TimeFrames")
-floor_pivots_monthly_cpr_color  = input(color.new(color.olive, 50), type = input.color,     title="Band Color",         inline="Monthly",       group="TimeFrames")
-show_yearly_pivots              = input(false,  type=input.bool,                            title="Yearly Pivots",      inline="Yearly",        group="TimeFrames")
-show_yearly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Yearly",        group="TimeFrames")
-floor_pivots_yearly_cpr_color   = input(color.new(color.gray, 50),  type = input.color,     title="Band Color",         inline="Yearly",        group="TimeFrames")
+// show_daily_pi vots               = input(true,   type=input.bool,                            title="Daily Pivots",       inline="Daily",         group="TimeFrames")
+// show_cpr                        = input(true,   type=input.bool,                            title="CPR",                inline="Daily",         group="TimeFrames")
+// floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="Band Color",         inline="Daily",         group="TimeFrames")
+// show_weekly_pivots              = input(false,  type=input.bool,                            title="Weekly Pivots",      inline="Weekly",        group="TimeFrames")
+// show_weekly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Weekly",        group="TimeFrames")
+// floor_pivots_weekly_cpr_color   = input(color.new(color.orange, 50),type = input.color,     title="Band Color",         inline="Weekly",        group="TimeFrames")
+// show_monthly_pivots             = input(false,  type=input.bool,                            title="Monthly Pivots",     inline="Monthly",       group="TimeFrames")
+// show_monthly_cpr                = input(true,   type=input.bool,                            title="CPR",                inline="Monthly",       group="TimeFrames")
+// floor_pivots_monthly_cpr_color  = input(color.new(color.olive, 50), type = input.color,     title="Band Color",         inline="Monthly",       group="TimeFrames")
+// show_yearly_pivots              = input(false,  type=input.bool,                            title="Yearly Pivots",      inline="Yearly",        group="TimeFrames")
+// show_yearly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Yearly",        group="TimeFrames")
+// floor_pivots_yearly_cpr_color   = input(color.new(color.gray, 50),  type = input.color,     title="Band Color",         inline="Yearly",        group="TimeFrames")
 
 
 // Calculations  
@@ -65,8 +69,10 @@ bc = temp_bc < temp_tc ? temp_bc : temp_tc
 dynamic_pivot_atr = atr(dynamic_pivot_atr_period) * dynamic_pivot_atr_threshold
 dynamic_high = high + dynamic_pivot_atr
 dynamic_low = low - dynamic_pivot_atr
-// Average True Range for DPZ
+// Average True Range for Pivot Level Dilation
 atr_norm = atr(atr_period) * atr_multiplier
+// Timeframe 
+floor_pivot_resolution = floor_pivot_timeframe
 
 
 // Daily Floor Pivots   
@@ -86,140 +92,140 @@ var bool show_daily_s4      = na
 daily_atr_dilation = security(syminfo.tickerid, 'D', atr_norm[1], barmerge.gaps_off, barmerge.lookahead_on)
 
 // Daily Floor Pivots 
-daily_pivot = security(syminfo.tickerid, 'D', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
-daily_r1    = security(syminfo.tickerid, 'D', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r2    = security(syminfo.tickerid, 'D', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r3    = security(syminfo.tickerid, 'D', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r4    = security(syminfo.tickerid, 'D', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_s1    = security(syminfo.tickerid, 'D', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_s2    = security(syminfo.tickerid, 'D', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_s3    = security(syminfo.tickerid, 'D', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_s4    = security(syminfo.tickerid, 'D', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_tbc   = security(syminfo.tickerid, 'D', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-daily_ttc   = security(syminfo.tickerid, 'D', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+daily_pivot = security(syminfo.tickerid, floor_pivot_resolution, pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+daily_r1    = security(syminfo.tickerid, floor_pivot_resolution, r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r2    = security(syminfo.tickerid, floor_pivot_resolution, r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r3    = security(syminfo.tickerid, floor_pivot_resolution, r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r4    = security(syminfo.tickerid, floor_pivot_resolution, r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s1    = security(syminfo.tickerid, floor_pivot_resolution, s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s2    = security(syminfo.tickerid, floor_pivot_resolution, s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
+daily_s3    = security(syminfo.tickerid, floor_pivot_resolution, s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
+daily_s4    = security(syminfo.tickerid, floor_pivot_resolution, s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
+daily_tbc   = security(syminfo.tickerid, floor_pivot_resolution, temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+daily_ttc   = security(syminfo.tickerid, floor_pivot_resolution, temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
 
-// Dynamic Daily Floor Pivot Logic
-show_daily_pivot    := show_daily_pivot[1]  == false and dynamic_pivot_levels and ((daily_pivot  >= dynamic_low and daily_pivot  <= dynamic_high) or (daily_tc >= dynamic_low and daily_tc <= dynamic_high) or (daily_bc >= dynamic_low and daily_bc <= dynamic_high)) ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_pivot[1]  == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_r1       := show_daily_r1[1]     == false and dynamic_pivot_levels and daily_r1       >= dynamic_low and daily_r1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_r2       := show_daily_r2[1]     == false and dynamic_pivot_levels and daily_r2       >= dynamic_low and daily_r2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_r3       := show_daily_r3[1]     == false and dynamic_pivot_levels and daily_r3       >= dynamic_low and daily_r3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_r4       := show_daily_r4[1]     == false and dynamic_pivot_levels and daily_r4       >= dynamic_low and daily_r4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_s1       := show_daily_s1[1]     == false and dynamic_pivot_levels and daily_s1       >= dynamic_low and daily_s1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_s2       := show_daily_s2[1]     == false and dynamic_pivot_levels and daily_s2       >= dynamic_low and daily_s2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_s3       := show_daily_s3[1]     == false and dynamic_pivot_levels and daily_s3       >= dynamic_low and daily_s3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
-show_daily_s4       := show_daily_s4[1]     == false and dynamic_pivot_levels and daily_s4       >= dynamic_low and daily_s4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+// Dynamic Daily Floor Pivot Logic (only for Intraday)
+show_daily_pivot    := show_daily_pivot[1]  == false and dynamic_pivot_levels and timeframe.isintraday and ((daily_pivot  >= dynamic_low and daily_pivot  <= dynamic_high) or (daily_tc >= dynamic_low and daily_tc <= dynamic_high) or (daily_bc >= dynamic_low and daily_bc <= dynamic_high)) ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_pivot[1]  == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r1       := show_daily_r1[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_r1       >= dynamic_low and daily_r1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r2       := show_daily_r2[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_r2       >= dynamic_low and daily_r2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r3       := show_daily_r3[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_r3       >= dynamic_low and daily_r3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_r4       := show_daily_r4[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_r4       >= dynamic_low and daily_r4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s1       := show_daily_s1[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s1       >= dynamic_low and daily_s1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s2       := show_daily_s2[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s2       >= dynamic_low and daily_s2     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s2[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s3       := show_daily_s3[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s3       >= dynamic_low and daily_s3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
+show_daily_s4       := show_daily_s4[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s4       >= dynamic_low and daily_s4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
 
 // Plots   
-plot(show_floor_pivots and show_daily_pivots and show_daily_pivot and not atr_dilation ? daily_pivot : na,         title = "Daily Pivot",  color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r1 and not atr_dilation ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r2 and not atr_dilation ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r3 and not atr_dilation ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_r4 and not atr_dilation ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s1 and not atr_dilation ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s2 and not atr_dilation ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s3 and not atr_dilation ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
-plot(show_floor_pivots and show_daily_pivots and show_daily_s4 and not atr_dilation ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_pivot and not atr_dilation ? daily_pivot : na,         title = "Pivot",        color = floor_pivots_p_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_r1 and not atr_dilation ? daily_r1 : na,               title = "R1",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_r2 and not atr_dilation ? daily_r2 : na,               title = "R2",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_r3 and not atr_dilation ? daily_r3 : na,               title = "R3",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_r4 and not atr_dilation ? daily_r4 : na,               title = "R4",           color = floor_pivots_r_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_s1 and not atr_dilation ? daily_s1 : na,               title = "S1",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_s2 and not atr_dilation ? daily_s2 : na,               title = "S2",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_s3 and not atr_dilation ? daily_s3 : na,               title = "S3",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
+plot(show_floor_pivots and show_floor_pivots and show_daily_s4 and not atr_dilation ? daily_s4 : na,               title = "S4",           color = floor_pivots_s_color,   linewidth = 2, style = plot.style_circles)
 tcline = plot(show_cpr and show_daily_pivot ? daily_tc : na,                                  title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 bcline = plot(show_cpr and show_daily_pivot ? daily_bc : na,                                  title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100), fillgaps = true)
 
 
-// Weekly Floor Pivots   
-//==============================================================================
-// Weekly 
-weekly_pivot = security(syminfo.tickerid, 'W', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
-weekly_r1    = security(syminfo.tickerid, 'W', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-weekly_r2    = security(syminfo.tickerid, 'W', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-weekly_r3    = security(syminfo.tickerid, 'W', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-weekly_r4    = security(syminfo.tickerid, 'W', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-weekly_s1    = security(syminfo.tickerid, 'W', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-weekly_s2    = security(syminfo.tickerid, 'W', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
-weekly_s3    = security(syminfo.tickerid, 'W', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
-weekly_s4    = security(syminfo.tickerid, 'W', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
-weekly_tbc   = security(syminfo.tickerid, 'W', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-weekly_ttc   = security(syminfo.tickerid, 'W', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-weekly_tc    = weekly_ttc > weekly_tbc ? weekly_ttc : weekly_tbc
-weekly_bc    = weekly_tbc < weekly_ttc ? weekly_tbc : weekly_ttc
+// // Weekly Floor Pivots   
+// //==============================================================================
+// // Weekly 
+// weekly_pivot = security(syminfo.tickerid, 'W', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_r1    = security(syminfo.tickerid, 'W', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// weekly_r2    = security(syminfo.tickerid, 'W', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// weekly_r3    = security(syminfo.tickerid, 'W', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// weekly_r4    = security(syminfo.tickerid, 'W', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// weekly_s1    = security(syminfo.tickerid, 'W', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// weekly_s2    = security(syminfo.tickerid, 'W', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_s3    = security(syminfo.tickerid, 'W', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_s4    = security(syminfo.tickerid, 'W', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_tbc   = security(syminfo.tickerid, 'W', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_ttc   = security(syminfo.tickerid, 'W', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// weekly_tc    = weekly_ttc > weekly_tbc ? weekly_ttc : weekly_tbc
+// weekly_bc    = weekly_tbc < weekly_ttc ? weekly_tbc : weekly_ttc
 
-// Plots   
-plot(show_floor_pivots and show_weekly_pivots ? weekly_pivot : na,            title = "Weekly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_r1 : na,               title = "Weekly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_r2 : na,               title = "Weekly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_r3 : na,               title = "Weekly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_r4 : na,               title = "Weekly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_s1 : na,               title = "Weekly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_s2 : na,               title = "Weekly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_s3 : na,               title = "Weekly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_weekly_pivots ? weekly_s4 : na,               title = "Weekly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-weekly_tcline = plot(show_weekly_cpr and show_weekly_pivots ? weekly_tc : na, title = "Weekly TC",           color = floor_pivots_weekly_cpr_color,         linewidth = 1, style = plot.style_line)
-weekly_bcline = plot(show_weekly_cpr and show_weekly_pivots ? weekly_bc : na, title = "Weekly BC",           color = floor_pivots_weekly_cpr_color,         linewidth = 1, style = plot.style_line)
-fill(weekly_tcline, weekly_bcline, color = color.new(floor_pivots_weekly_cpr_color, show_weekly_cpr and show_weekly_pivots ? 75 : 100), fillgaps = true)
-
-
-// Monthly Floor Pivots   
-//==============================================================================
-// Monthly 
-monthly_pivot = security(syminfo.tickerid, 'M', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
-monthly_r1    = security(syminfo.tickerid, 'M', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-monthly_r2    = security(syminfo.tickerid, 'M', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-monthly_r3    = security(syminfo.tickerid, 'M', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-monthly_r4    = security(syminfo.tickerid, 'M', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-monthly_s1    = security(syminfo.tickerid, 'M', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-monthly_s2    = security(syminfo.tickerid, 'M', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
-monthly_s3    = security(syminfo.tickerid, 'M', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
-monthly_s4    = security(syminfo.tickerid, 'M', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
-monthly_tbc   = security(syminfo.tickerid, 'M', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-monthly_ttc   = security(syminfo.tickerid, 'M', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-monthly_tc    = monthly_ttc > monthly_tbc ? monthly_ttc : monthly_tbc
-monthly_bc    = monthly_tbc < monthly_ttc ? monthly_tbc : monthly_ttc
-
-// Plots   
-plot(show_floor_pivots and show_monthly_pivots ? monthly_pivot : na,            title = "Monthly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_r1 : na,               title = "Monthly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_r2 : na,               title = "Monthly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_r3 : na,               title = "Monthly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_r4 : na,               title = "Monthly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_s1 : na,               title = "Monthly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_s2 : na,               title = "Monthly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_s3 : na,               title = "Monthly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_monthly_pivots ? monthly_s4 : na,               title = "Monthly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-monthly_tcline = plot(show_monthly_cpr and show_monthly_pivots ? monthly_tc : na, title = "Monthly TC",           color = floor_pivots_monthly_cpr_color,         linewidth = 1, style = plot.style_line)
-monthly_bcline = plot(show_monthly_cpr and show_monthly_pivots ? monthly_bc : na, title = "Monthly BC",           color = floor_pivots_monthly_cpr_color,         linewidth = 1, style = plot.style_line)
-fill(monthly_tcline, monthly_bcline, color = color.new(floor_pivots_monthly_cpr_color, show_monthly_cpr and show_monthly_pivots ? 75 : 100), fillgaps = true)
+// // Plots   
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_pivot : na,            title = "Weekly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_r1 : na,               title = "Weekly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_r2 : na,               title = "Weekly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_r3 : na,               title = "Weekly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_r4 : na,               title = "Weekly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_s1 : na,               title = "Weekly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_s2 : na,               title = "Weekly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_s3 : na,               title = "Weekly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_weekly_pivots ? weekly_s4 : na,               title = "Weekly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// weekly_tcline = plot(show_weekly_cpr and show_weekly_pivots ? weekly_tc : na, title = "Weekly TC",           color = floor_pivots_weekly_cpr_color,         linewidth = 1, style = plot.style_line)
+// weekly_bcline = plot(show_weekly_cpr and show_weekly_pivots ? weekly_bc : na, title = "Weekly BC",           color = floor_pivots_weekly_cpr_color,         linewidth = 1, style = plot.style_line)
+// fill(weekly_tcline, weekly_bcline, color = color.new(floor_pivots_weekly_cpr_color, show_weekly_cpr and show_weekly_pivots ? 75 : 100), fillgaps = true)
 
 
-// Yearly Floor Pivots   
-//==============================================================================
-// yearly 
-yearly_pivot = security(syminfo.tickerid, '12M', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
-yearly_r1    = security(syminfo.tickerid, '12M', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-yearly_r2    = security(syminfo.tickerid, '12M', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-yearly_r3    = security(syminfo.tickerid, '12M', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-yearly_r4    = security(syminfo.tickerid, '12M', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-yearly_s1    = security(syminfo.tickerid, '12M', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-yearly_s2    = security(syminfo.tickerid, '12M', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
-yearly_s3    = security(syminfo.tickerid, '12M', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
-yearly_s4    = security(syminfo.tickerid, '12M', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
-yearly_tbc   = security(syminfo.tickerid, '12M', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-yearly_ttc   = security(syminfo.tickerid, '12M', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-yearly_tc    = yearly_ttc > yearly_tbc ? yearly_ttc : yearly_tbc
-yearly_bc    = yearly_tbc < yearly_ttc ? yearly_tbc : yearly_ttc
+// // Monthly Floor Pivots   
+// //==============================================================================
+// // Monthly 
+// monthly_pivot = security(syminfo.tickerid, 'M', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_r1    = security(syminfo.tickerid, 'M', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// monthly_r2    = security(syminfo.tickerid, 'M', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// monthly_r3    = security(syminfo.tickerid, 'M', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// monthly_r4    = security(syminfo.tickerid, 'M', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// monthly_s1    = security(syminfo.tickerid, 'M', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// monthly_s2    = security(syminfo.tickerid, 'M', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_s3    = security(syminfo.tickerid, 'M', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_s4    = security(syminfo.tickerid, 'M', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_tbc   = security(syminfo.tickerid, 'M', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_ttc   = security(syminfo.tickerid, 'M', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// monthly_tc    = monthly_ttc > monthly_tbc ? monthly_ttc : monthly_tbc
+// monthly_bc    = monthly_tbc < monthly_ttc ? monthly_tbc : monthly_ttc
 
-// Plots   
-plot(show_floor_pivots and show_yearly_pivots ? yearly_pivot : na,            title = "Yearly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_r1 : na,               title = "Yearly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_r2 : na,               title = "Yearly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_r3 : na,               title = "Yearly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_r4 : na,               title = "Yearly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_s1 : na,               title = "Yearly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_s2 : na,               title = "Yearly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_s3 : na,               title = "Yearly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-plot(show_floor_pivots and show_yearly_pivots ? yearly_s4 : na,               title = "Yearly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
-yearly_tcline = plot(show_yearly_cpr and show_yearly_pivots ? yearly_tc : na, title = "Yearly TC",           color = floor_pivots_yearly_cpr_color,         linewidth = 1, style = plot.style_line)
-yearly_bcline = plot(show_yearly_cpr and show_yearly_pivots ? yearly_bc : na, title = "Yearly BC",           color = floor_pivots_yearly_cpr_color,         linewidth = 1, style = plot.style_line)
-fill(yearly_tcline, yearly_bcline, color = color.new(floor_pivots_yearly_cpr_color, show_yearly_cpr and show_yearly_pivots ? 75 : 100), fillgaps = true)
+// // Plots   
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_pivot : na,            title = "Monthly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_r1 : na,               title = "Monthly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_r2 : na,               title = "Monthly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_r3 : na,               title = "Monthly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_r4 : na,               title = "Monthly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_s1 : na,               title = "Monthly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_s2 : na,               title = "Monthly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_s3 : na,               title = "Monthly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_monthly_pivots ? monthly_s4 : na,               title = "Monthly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// monthly_tcline = plot(show_monthly_cpr and show_monthly_pivots ? monthly_tc : na, title = "Monthly TC",           color = floor_pivots_monthly_cpr_color,         linewidth = 1, style = plot.style_line)
+// monthly_bcline = plot(show_monthly_cpr and show_monthly_pivots ? monthly_bc : na, title = "Monthly BC",           color = floor_pivots_monthly_cpr_color,         linewidth = 1, style = plot.style_line)
+// fill(monthly_tcline, monthly_bcline, color = color.new(floor_pivots_monthly_cpr_color, show_monthly_cpr and show_monthly_pivots ? 75 : 100), fillgaps = true)
+
+
+// // Yearly Floor Pivots   
+// //==============================================================================
+// // yearly 
+// yearly_pivot = security(syminfo.tickerid, '12M', pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_r1    = security(syminfo.tickerid, '12M', r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// yearly_r2    = security(syminfo.tickerid, '12M', r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// yearly_r3    = security(syminfo.tickerid, '12M', r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// yearly_r4    = security(syminfo.tickerid, '12M', r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// yearly_s1    = security(syminfo.tickerid, '12M', s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
+// yearly_s2    = security(syminfo.tickerid, '12M', s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_s3    = security(syminfo.tickerid, '12M', s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_s4    = security(syminfo.tickerid, '12M', s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_tbc   = security(syminfo.tickerid, '12M', temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_ttc   = security(syminfo.tickerid, '12M', temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+// yearly_tc    = yearly_ttc > yearly_tbc ? yearly_ttc : yearly_tbc
+// yearly_bc    = yearly_tbc < yearly_ttc ? yearly_tbc : yearly_ttc
+
+// // Plots   
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_pivot : na,            title = "Yearly Pivot",        color = color.new(floor_pivots_p_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_r1 : na,               title = "Yearly R1",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_r2 : na,               title = "Yearly R2",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_r3 : na,               title = "Yearly R3",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_r4 : na,               title = "Yearly R4",           color = color.new(floor_pivots_r_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_s1 : na,               title = "Yearly S1",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_s2 : na,               title = "Yearly S2",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_s3 : na,               title = "Yearly S3",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// plot(show_floor_pivots and show_yearly_pivots ? yearly_s4 : na,               title = "Yearly S4",           color = color.new(floor_pivots_s_color, 50),   linewidth = 1, style = plot.style_circles)
+// yearly_tcline = plot(show_yearly_cpr and show_yearly_pivots ? yearly_tc : na, title = "Yearly TC",           color = floor_pivots_yearly_cpr_color,         linewidth = 1, style = plot.style_line)
+// yearly_bcline = plot(show_yearly_cpr and show_yearly_pivots ? yearly_bc : na, title = "Yearly BC",           color = floor_pivots_yearly_cpr_color,         linewidth = 1, style = plot.style_line)
+// fill(yearly_tcline, yearly_bcline, color = color.new(floor_pivots_yearly_cpr_color, show_yearly_cpr and show_yearly_pivots ? 75 : 100), fillgaps = true)
 
 
 // Debugging
