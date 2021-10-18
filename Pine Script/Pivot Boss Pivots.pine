@@ -2,20 +2,12 @@
 // This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
 // © pranjalchaubey
 
-// Credits 
-//==============================================================================
-// A large amount of code in this indicator was taken from Legendary Chris Moody's
-// "CM_Pivot Points_M-W-D_4H_1H_Filtered" Indicator
-//==============================================================================
-
-
 //Structural Pivots
 study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", shorttitle="[CP]Pivot Boss Floor Pivots", overlay=true, max_labels_count=500)
 
 
 // User Inputs 
 //==============================================================================
-
 floor_pivot_timeframe           = input("D",    options=["D", "W", "M", "12M"],             title="Floor Pivot Timeframe",                      group="Floor Pivots")
 show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
 show_cpr                        = input(true,   type=input.bool,                            title="Show CPR",                                   group="Floor Pivots")
@@ -33,20 +25,6 @@ floor_pivots_p_color            = input(color.new(color.yellow, 0), type = input
 floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="CPR Band",                                   group="Color Scheme")
 floor_pivots_r_color            = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels",             group="Color Scheme")
 floor_pivots_s_color            = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels",                group="Color Scheme")
-
-
-// show_daily_pi vots               = input(true,   type=input.bool,                            title="Daily Pivots",       inline="Daily",         group="TimeFrames")
-// show_cpr                        = input(true,   type=input.bool,                            title="CPR",                inline="Daily",         group="TimeFrames")
-// floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="Band Color",         inline="Daily",         group="TimeFrames")
-// show_weekly_pivots              = input(false,  type=input.bool,                            title="Weekly Pivots",      inline="Weekly",        group="TimeFrames")
-// show_weekly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Weekly",        group="TimeFrames")
-// floor_pivots_weekly_cpr_color   = input(color.new(color.orange, 50),type = input.color,     title="Band Color",         inline="Weekly",        group="TimeFrames")
-// show_monthly_pivots             = input(false,  type=input.bool,                            title="Monthly Pivots",     inline="Monthly",       group="TimeFrames")
-// show_monthly_cpr                = input(true,   type=input.bool,                            title="CPR",                inline="Monthly",       group="TimeFrames")
-// floor_pivots_monthly_cpr_color  = input(color.new(color.olive, 50), type = input.color,     title="Band Color",         inline="Monthly",       group="TimeFrames")
-// show_yearly_pivots              = input(false,  type=input.bool,                            title="Yearly Pivots",      inline="Yearly",        group="TimeFrames")
-// show_yearly_cpr                 = input(true,   type=input.bool,                            title="CPR",                inline="Yearly",        group="TimeFrames")
-// floor_pivots_yearly_cpr_color   = input(color.new(color.gray, 50),  type = input.color,     title="Band Color",         inline="Yearly",        group="TimeFrames")
 
 
 // Calculations  
@@ -79,7 +57,7 @@ atr_norm = atr(atr_period) * atr_multiplier
 floor_pivot_resolution = floor_pivot_timeframe
 
 
-// Floor Pivots I
+// Floor Pivots
 //==============================================================================
 // Dynamic Floor Pivot Variables 
 var bool show_daily_pivot   = na
