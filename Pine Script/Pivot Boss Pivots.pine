@@ -19,6 +19,7 @@ study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", 
 floor_pivot_timeframe           = input("D",    options=["D", "W", "M", "12M"],             title="Floor Pivot Timeframe",                      group="Floor Pivot I")
 show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivot I")
 show_cpr                        = input(true,   type=input.bool,                            title="Show CPR",                                   group="Floor Pivot I")
+show_next_day_pivot             = input(false,  type=input.bool,                            title="Show Next Time Period Pivots",               group="Floor Pivot I")
 dynamic_pivot_levels            = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Floor Pivot I")
 dynamic_pivot_atr_period        = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Floor Pivot I")
 dynamic_pivot_atr_threshold     = input(2.0,    type=input.float,   minval=0.001, maxval=10,title="ATR Threshold for Dynamic Floor Pivots",     group="Floor Pivot I")
@@ -91,17 +92,17 @@ var bool show_daily_s4      = na
 daily_atr_dilation = security(syminfo.tickerid, 'D', atr_norm[1], barmerge.gaps_off, barmerge.lookahead_on)
 
 // Daily Floor Pivots 
-daily_pivot = security(syminfo.tickerid, floor_pivot_resolution, pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
-daily_r1    = security(syminfo.tickerid, floor_pivot_resolution, r1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r2    = security(syminfo.tickerid, floor_pivot_resolution, r2[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r3    = security(syminfo.tickerid, floor_pivot_resolution, r3[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_r4    = security(syminfo.tickerid, floor_pivot_resolution, r4[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_s1    = security(syminfo.tickerid, floor_pivot_resolution, s1[1],        barmerge.gaps_off, barmerge.lookahead_on) 
-daily_s2    = security(syminfo.tickerid, floor_pivot_resolution, s2[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_s3    = security(syminfo.tickerid, floor_pivot_resolution, s3[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_s4    = security(syminfo.tickerid, floor_pivot_resolution, s4[1],        barmerge.gaps_off, barmerge.lookahead_on)
-daily_tbc   = security(syminfo.tickerid, floor_pivot_resolution, temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
-daily_ttc   = security(syminfo.tickerid, floor_pivot_resolution, temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+daily_pivot = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+daily_r1    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? r1 : r1[1],              barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r2    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? r2 : r2[1],              barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r3    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? r3 : r3[1],              barmerge.gaps_off, barmerge.lookahead_on) 
+daily_r4    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? r4 : r4[1],              barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s1    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? s1 : s1[1],              barmerge.gaps_off, barmerge.lookahead_on) 
+daily_s2    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? s2 : s2[1],              barmerge.gaps_off, barmerge.lookahead_on)
+daily_s3    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? s3 : s3[1],              barmerge.gaps_off, barmerge.lookahead_on)
+daily_s4    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? s4 : s4[1],              barmerge.gaps_off, barmerge.lookahead_on)
+daily_tbc   = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_ttc   = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
 
