@@ -11,6 +11,7 @@ study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", 
 floor_pivot_timeframe           = input("D",    options=["D", "W", "M", "12M"],             title="Floor Pivot Timeframe",                      group="Floor Pivots")
 show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
 show_cpr                        = input(true,   type=input.bool,                            title="Show CPR",                                   group="Floor Pivots")
+show_labels                     = input(true,   type=input.bool,                            title="Show Pivot Lables",                          group="Floor Pivots")
 show_next_day_pivot             = input(false,  type=input.bool,                            title="Show Next Time Period Pivots",               group="Floor Pivots")
 
 dynamic_pivot_levels            = input(true,   type=input.bool,                            title="Show Floor Pivot Levels Dynamically",        group="Dynamic Pivot Levels")
@@ -124,7 +125,6 @@ s4b = plot(show_floor_pivots and show_daily_s4 and atr_dilation and timeframe.is
 tcline = plot(show_cpr and show_daily_pivot and not atr_dilation ? daily_tc : show_cpr and show_daily_pivot and atr_dilation and timeframe.isintraday ? daily_tc+daily_atr_dilation : show_cpr and show_daily_pivot and atr_dilation and not timeframe.isintraday ? daily_tc : na,                                  title = "TC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 bcline = plot(show_cpr and show_daily_pivot and not atr_dilation ? daily_bc : show_cpr and show_daily_pivot and atr_dilation and timeframe.isintraday ? daily_bc-daily_atr_dilation : show_cpr and show_daily_pivot and atr_dilation and not timeframe.isintraday ? daily_bc : na,                                  title = "BC",           color = floor_pivots_cpr_color, linewidth = 1, style = plot.style_line)
 fill(tcline, bcline, color = color.new(floor_pivots_cpr_color, show_cpr and show_daily_pivot ? 75 : 100))
-
 // Fill ATR Dilated bands 
 fill(p1a, p1b, color.new(floor_pivots_p_color, 75))
 fill(r1a, r1b, color.new(floor_pivots_r_color, 75))
@@ -135,6 +135,27 @@ fill(s1a, s1b, color.new(floor_pivots_s_color, 75))
 fill(s2a, s2b, color.new(floor_pivots_s_color, 75))
 fill(s3a, s3b, color.new(floor_pivots_s_color, 75))
 fill(s4a, s4b, color.new(floor_pivots_s_color, 75))
+// Pivot Lables 
+if show_labels
+    chper = time - time[1]
+    chper := change(chper) > 0 ? chper[1] : chper
+
+    var label plabel = na 
+    var label s1label = na, var label s2label = na, var label s3label = na, var label s4label = na
+    var label r1label = na, var label r2label = na, var label r3label = na, var label r4label = na
+
+    label.delete(plabel)
+    label.delete(s1label), label.delete(s2label), label.delete(s3label), label.delete(s4label)
+    label.delete(r1label), label.delete(r2label), label.delete(r3label), label.delete(r4label)
+    plabel := label.new(x = time + chper * 20, y = daily_pivot, text = "Pivot", color = color.blue, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
+    r1label := label.new(x = time + chper * 20, y = daily_r1, text = "S1", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r2label := label.new(x = time + chper * 20, y = daily_r2, text = "S2", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r3label := label.new(x = time + chper * 20, y = daily_r3, text = "S3", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r4label := label.new(x = time + chper * 20, y = daily_r4, text = "S4", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s1label := label.new(x = time + chper * 20, y = daily_s1, text = "S1", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s2label := label.new(x = time + chper * 20, y = daily_s2, text = "S2", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s3label := label.new(x = time + chper * 20, y = daily_s3, text = "S3", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s4label := label.new(x = time + chper * 20, y = daily_s4, text = "S4", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
 
 
 // Debugging
