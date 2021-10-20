@@ -18,7 +18,7 @@ dynamic_pivot_levels            = input(true,   type=input.bool,                
 dynamic_pivot_atr_period        = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Dynamic Pivot Levels")
 dynamic_pivot_atr_threshold     = input(2.0,    type=input.float,   minval=0.001, maxval=10,title="ATR Threshold for Dynamic Floor Pivots",     group="Dynamic Pivot Levels")
 
-atr_dilation                    = input(false,  type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
+atr_dilation                    = input(true,   type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
 atr_multiplier                  = input(0.05,   type=input.float,   minval=0.001, maxval=10,title="ATR Dilation Multiplier",                    group="ATR Dilation")
 atr_period                      = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Dilation")
 
