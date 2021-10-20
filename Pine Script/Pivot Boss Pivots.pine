@@ -146,20 +146,21 @@ if show_labels
     label.delete(plabel)
     label.delete(s1label), label.delete(s2label), label.delete(s3label), label.delete(s4label)
     label.delete(r1label), label.delete(r2label), label.delete(r3label), label.delete(r4label)
-    plabel  := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_pivot,  text = "Pivot", color = floor_pivots_p_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
-    r1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r1,     text = "S1",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r2,     text = "S2",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r3,     text = "S3",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r4,     text = "S4",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s1,     text = "S1",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s2,     text = "S2",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s3,     text = "S3",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s4,     text = "S4",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-
-
-// Debugging
-//==============================================================================
-// plotchar(show_daily_pivot, "Show Daily Pivot", "", location = location.top, size=size.tiny, color=color.lime)
-// plotchar(dayofmonth != dayofmonth[1], "Day of Month", "", location = location.top, size=size.tiny, color=color.lime)
-// var label lbl_a = na, label.delete(lbl_a)
-// lbl_a := label.new(bar_index - 2, high + high*0.005, text = "TimeFrame = " + timeframe.period, textalign = text.align_left)
+    if show_floor_pivots and show_daily_pivot
+        plabel  := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_pivot+daily_atr_dilation    : daily_pivot,  text = "Pivot", color = floor_pivots_p_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
+    if show_floor_pivots and show_daily_r1
+        r1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r1+daily_atr_dilation       : daily_r1,     text = "R1",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_r2
+        r2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r2+daily_atr_dilation       : daily_r2,     text = "R2",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_r3
+        r3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r3+daily_atr_dilation       : daily_r3,     text = "R3",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_r4
+        r4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r4+daily_atr_dilation       : daily_r4,     text = "R4",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_s1
+        s1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s1+daily_atr_dilation       : daily_s1,     text = "S1",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_s2
+        s2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s2+daily_atr_dilation       : daily_s2,     text = "S2",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_s3
+        s3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s3+daily_atr_dilation       : daily_s3,     text = "S3",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    if show_floor_pivots and show_daily_s4
+        s4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s4+daily_atr_dilation       : daily_s4,     text = "S4",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
