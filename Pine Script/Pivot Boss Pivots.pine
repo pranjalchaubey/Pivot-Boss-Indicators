@@ -18,7 +18,7 @@ dynamic_pivot_levels            = input(true,   type=input.bool,                
 dynamic_pivot_atr_period        = input(14,     type=input.integer, minval=1, maxval=356,   title="Dynamic Pivot ATR Period",                   group="Dynamic Pivot Levels")
 dynamic_pivot_atr_threshold     = input(2.0,    type=input.float,   minval=0.001, maxval=10,title="ATR Threshold for Dynamic Floor Pivots",     group="Dynamic Pivot Levels")
 
-atr_dilation                    = input(true,   type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
+atr_dilation                    = input(false,  type=input.bool,                            title="Use ATR to Dilate Intraday Pivot Levels",    group="ATR Dilation")
 atr_multiplier                  = input(0.05,   type=input.float,   minval=0.001, maxval=10,title="ATR Dilation Multiplier",                    group="ATR Dilation")
 atr_period                      = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Dilation")
 
@@ -70,10 +70,8 @@ var bool show_daily_s1      = na
 var bool show_daily_s2      = na
 var bool show_daily_s3      = na
 var bool show_daily_s4      = na
-
 // Daily Average True Range for ATR Dilation
 daily_atr_dilation = security(syminfo.tickerid, 'D', atr_norm[1], barmerge.gaps_off, barmerge.lookahead_on)
-
 // Daily Floor Pivots 
 daily_pivot = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
 daily_r1    = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? r1 : r1[1],              barmerge.gaps_off, barmerge.lookahead_on) 
@@ -88,7 +86,6 @@ daily_tbc   = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_p
 daily_ttc   = security(syminfo.tickerid, floor_pivot_resolution, show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc    = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc    = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
-
 // Dynamic Daily Floor Pivot Logic (only for Intraday)
 show_daily_pivot    := show_daily_pivot[1]  == false and dynamic_pivot_levels and timeframe.isintraday and ((daily_pivot  >= dynamic_low and daily_pivot  <= dynamic_high) or (daily_tc >= dynamic_low and daily_tc <= dynamic_high) or (daily_bc >= dynamic_low and daily_bc <= dynamic_high)) ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_pivot[1]  == true and dayofmonth == dayofmonth[1] ? 1 : 0
 show_daily_r1       := show_daily_r1[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_r1       >= dynamic_low and daily_r1     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_r1[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
@@ -100,7 +97,9 @@ show_daily_s2       := show_daily_s2[1]     == false and dynamic_pivot_levels an
 show_daily_s3       := show_daily_s3[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s3       >= dynamic_low and daily_s3     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s3[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
 show_daily_s4       := show_daily_s4[1]     == false and dynamic_pivot_levels and timeframe.isintraday and daily_s4       >= dynamic_low and daily_s4     <= dynamic_high ? 1 : dynamic_pivot_levels == false ? 1 : show_daily_s4[1]     == true and dayofmonth == dayofmonth[1] ? 1 : 0
 
+
 // Plots   
+//==============================================================================
 // Neutral and ATR Dilated Positive plots 
 p1a = plot(show_floor_pivots and show_daily_pivot and not atr_dilation ? daily_pivot : show_floor_pivots and show_daily_pivot and atr_dilation and timeframe.isintraday ? daily_pivot+daily_atr_dilation : show_floor_pivots and show_daily_pivot and atr_dilation and not timeframe.isintraday ? daily_pivot : na, title = "Pivot",        color = color.new(floor_pivots_p_color, atr_dilation and timeframe.isintraday ? 100 : 0),   linewidth = 1, style = plot.style_circles)
 r1a = plot(show_floor_pivots and show_daily_r1 and not atr_dilation ? daily_r1 : show_floor_pivots and show_daily_r1 and atr_dilation and timeframe.isintraday ? daily_r1+daily_atr_dilation : show_floor_pivots and show_daily_r1 and atr_dilation and not timeframe.isintraday ? daily_r1 : na,                   title = "R1",           color = color.new(floor_pivots_r_color, atr_dilation and timeframe.isintraday ? 100 : 0),   linewidth = 1, style = plot.style_circles)
@@ -147,15 +146,15 @@ if show_labels
     label.delete(plabel)
     label.delete(s1label), label.delete(s2label), label.delete(s3label), label.delete(s4label)
     label.delete(r1label), label.delete(r2label), label.delete(r3label), label.delete(r4label)
-    plabel := label.new(x = time + chper * 20, y = daily_pivot, text = "Pivot", color = color.blue, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
-    r1label := label.new(x = time + chper * 20, y = daily_r1, text = "S1", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r2label := label.new(x = time + chper * 20, y = daily_r2, text = "S2", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r3label := label.new(x = time + chper * 20, y = daily_r3, text = "S3", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    r4label := label.new(x = time + chper * 20, y = daily_r4, text = "S4", color = color.red, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s1label := label.new(x = time + chper * 20, y = daily_s1, text = "S1", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s2label := label.new(x = time + chper * 20, y = daily_s2, text = "S2", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s3label := label.new(x = time + chper * 20, y = daily_s3, text = "S3", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
-    s4label := label.new(x = time + chper * 20, y = daily_s4, text = "S4", color = color.lime, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    plabel  := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_pivot,  text = "Pivot", color = floor_pivots_p_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
+    r1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r1,     text = "S1",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r2,     text = "S2",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r3,     text = "S3",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    r4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_r4,     text = "S4",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s1,     text = "S1",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s2,     text = "S2",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s3,     text = "S3",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+    s4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_s4,     text = "S4",    color = floor_pivots_s_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
 
 
 // Debugging
