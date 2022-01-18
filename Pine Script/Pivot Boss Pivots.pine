@@ -22,10 +22,29 @@ atr_dilation                    = input(true,   type=input.bool,                
 atr_multiplier                  = input(0.05,   type=input.float,   minval=0.001, maxval=10,title="ATR Dilation Factor",                        group="ATR Pivot Dilation")
 atr_period                      = input(14,     type=input.integer, minval=1, maxval=356,   title="ATR Period",                                 group="ATR Pivot Dilation")
 
+vis1                            = input(true,                                               title="Enable 1st Moving Average",                  group="Bonus Indicators")
+ma1                             = input("SMA", options=["SMA", "EMA", "WMA", "VWMA"],       title="Moving Average Type",                        group="Bonus Indicators")
+len1                            = input(13,     type=input.integer, minval=1,               title="Moving Average 1 Length",                    group="Bonus Indicators")
+src1                            = input(close,  type=input.source,                          title="Moving Average 1 Source",                    group="Bonus Indicators")
+off1                            = input(0,      type=input.integer, minval=-500, maxval=500,title="Moving Average 1 Offset",                    group="Bonus Indicators")
+vis2                            = input(true,                                               title="Enable 2nd Moving Average",                  group="Bonus Indicators")
+ma2                             = input("SMA", options=["SMA", "EMA", "WMA", "VWMA"],       title="Moving Average Type",                        group="Bonus Indicators")
+len2                            = input(21,     type=input.integer, minval=1,               title="Moving Average 2 Length",                    group="Bonus Indicators")
+src2                            = input(close,  type=input.source,                          title="Moving Average 2 Source",                    group="Bonus Indicators")
+off2                            = input(0,      type=input.integer, minval=-500, maxval=500,title="Moving Average 2 Offset",                    group="Bonus Indicators")
+vis3                            = input(true,                                               title="Enable 3rd Moving Average",                  group="Bonus Indicators")
+ma3                             = input("SMA", options=["SMA", "EMA", "WMA", "VWMA"],       title="Moving Average Type",                        group="Bonus Indicators")
+len3                            = input(55,     type=input.integer, minval=1,               title="Moving Average 3 Length",                    group="Bonus Indicators")
+src3                            = input(close,  type=input.source,                          title="Moving Average 3 Source",                    group="Bonus Indicators")
+off3                            = input(0,      type=input.integer, minval=-500, maxval=500,title="Moving Average 3 Offset",                    group="Bonus Indicators")
+
 floor_pivots_p_color            = input(color.new(color.yellow, 0), type = input.color,     title="Central Floor Pivot",                        group="Color Scheme")
 floor_pivots_cpr_color          = input(color.new(color.blue, 50),  type = input.color,     title="CPR Band",                                   group="Color Scheme")
 floor_pivots_r_color            = input(color.new(color.red, 0),    type = input.color,     title="Floor Pivots Resistance Levels",             group="Color Scheme")
 floor_pivots_s_color            = input(color.new(color.lime, 0),   type = input.color,     title="Floor Pivots Support Levels",                group="Color Scheme")
+ma_1_color                      = input(color.new(color.red, 0),    type = input.color,     title="Moving Average 1",                           group="Color Scheme")
+ma_2_color                      = input(color.new(color.yellow, 0), type = input.color,     title="Moving Average 2",                           group="Color Scheme")
+ma_3_color                      = input(color.new(color.aqua, 0),   type = input.color,     title="Moving Average 3",                           group="Color Scheme")
 
 
 // Calculations  
@@ -56,6 +75,31 @@ dynamic_low = low - dynamic_pivot_atr
 atr_norm = atr(atr_period) * atr_multiplier
 // Timeframe 
 floor_pivot_resolution = floor_pivot_timeframe
+// Bonus Indicators 
+val_ma1 = if ma1 == "SMA"
+    sma(src1, len1)
+else if ma1 == "EMA"
+    ema(src1, len1)
+else if ma1 == "WMA"
+    wma(src1, len1)
+else if ma1 == "VWMA"
+    vwma(src1, len1)
+val_ma2 = if ma2 == "SMA"
+    sma(src2, len2)
+else if ma2 == "EMA"
+    ema(src2, len2)
+else if ma2 == "WMA"
+    wma(src2, len2)
+else if ma2 == "VWMA"
+    vwma(src2, len2)
+val_ma3 = if ma3 == "SMA"
+    sma(src3, len3)
+else if ma3 == "EMA"
+    ema(src3, len3)
+else if ma3 == "WMA"
+    wma(src3, len3)
+else if ma3 == "VWMA"
+    vwma(src3, len3)
 
 
 // Floor Pivots
@@ -164,3 +208,7 @@ if show_labels
         s3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s3+daily_atr_dilation       : daily_s3,     text = "S3",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
     if show_floor_pivots and show_daily_s4
         s4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s4+daily_atr_dilation       : daily_s4,     text = "S4",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+// Bonus Indicators 
+plot(vis1 ? val_ma1: na, title="Moving Average 1", color=color.new(ma_1_color, 0), linewidth=1, offset=off1)
+plot(vis2 ? val_ma2: na, title="Moving Average 2", color=color.new(ma_2_color, 0), linewidth=1, offset=off2)
+plot(vis3 ? val_ma3: na, title="Moving Average 3", color=color.new(ma_3_color, 0), linewidth=1, offset=off3)
