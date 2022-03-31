@@ -28,6 +28,12 @@ endYear     = input(title="End Year",       type=input.integer, defval=2012,    
 // Look if the current_close time of the current bar falls inside the date range
 inDateRange = (time >= timestamp(syminfo.timezone, startYear, startMonth, startDate, 0, 0)) and (time < timestamp(syminfo.timezone, endYear, endMonth, endDate, 0, 0))
 date_range  = input(false,  title="Use the date range above to mark the Candlestick Setups?",                   group="General User Inputs")
+mid_enable  = input(true,   title="Mark Candle Mid-Range on the signal candles?",                               group="General User Inputs")
+
+
+// Candle Mid-range Calculation 
+//==============================================================================
+mid_range = current_low + (current_high - current_low) / 2
 
 
 // EXTREME REVERSAL SETUP 
@@ -78,8 +84,12 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
     if enable_extreme_reversal_setup == true            // Plot only if the user wants to plot the Extreme Reversal Setups on the chart 
         if bullish_extreme_reversal == true             // A bullish extreme reversal was found 
             label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_extreme_marker_color, style=bullish_extreme_reversal_marker, size=size.auto, tooltip="Bullish Extreme Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bullish_extreme_marker_color, style= label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
         else if bearish_extreme_reversal == true        // A bearish extreme reversal was found 
             label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_extreme_marker_color, style=bearish_extreme_reversal_marker, size=size.auto, tooltip="Bearish Extreme Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bearish_extreme_marker_color, style= label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
 
 
 // Debugging
@@ -129,8 +139,12 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
     if enable_outside_reversal_setup == true            // Plot only if the user wants to plot the Outside Reversal Setups on the chart 
         if bullish_outside_reversal == true             // A bullish outside reversal was found 
             label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_outside_marker_color, style=bullish_outside_reversal_marker, size=size.auto, tooltip="Bullish Outside Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bullish_outside_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
         else if bearish_outside_reversal == true        // A bearish outside reversal was found 
             label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_outside_marker_color, style=bearish_outside_reversal_marker, size=size.auto, tooltip="Bearish Outside Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bearish_outside_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
 
 
 // DOJI REVERSAL SETUP 
@@ -179,8 +193,12 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
     if enable_doji_reversal_setup == true               // Plot only if the user wants to plot the Doji Reversal Setups on the chart 
         if bullish_doji_reversal == true                // A bullish doji reversal was found 
             label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_doji_marker_color, style=bullish_doji_reversal_marker, size=size.auto, tooltip="Bullish Doji Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bullish_doji_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
         else if bearish_doji_reversal == true           // A bearish doji reversal was found 
             label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_doji_marker_color, style=bearish_doji_reversal_marker, size=size.auto, tooltip="Bearish Doji Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bearish_doji_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
 
 
 // Debugging
@@ -235,8 +253,12 @@ if not(date_range == true and inDateRange == false)     // Plot only if the bar 
     if enable_wick_reversal_setup == true               // Plot only if the user wants to plot the Wick Reversal Setups on the chart 
         if close_bullish == true                        // A bullish wick reversal was found 
             label.new(x=current_x, y=low, yloc=yloc.belowbar, color=bullish_wick_marker_color, style=bullish_wick_reversal_marker, size=size.auto, tooltip="Bullish Wick Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bullish_wick_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
         else if close_bearish == true                        // A bearish wick reversal was found 
             label.new(x=current_x, y=high, yloc=yloc.abovebar, color=bearish_wick_marker_color, style=bearish_wick_reversal_marker, size=size.auto, tooltip="Bearish Wick Reversal Setup")
+            if mid_enable == true                       // Plot the Signal Candle Mid-range 
+                label.new(x=current_x, y=mid_range, yloc=yloc.price, color=bearish_wick_marker_color, style=label.style_xcross, size=size.auto, tooltip="Signal Candle Mid-Range")
 
 
 // Debugging
