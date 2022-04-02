@@ -8,34 +8,34 @@ study(title="[CP]Pivot Boss Multi Timeframe CPR with MACD", shorttitle="[CP]Pivo
 
 // User Inputs 
 //==============================================================================
-show_yearly_cpr             = input(true,                           type=input.bool,        title="Yearly CPR",         inline='yearly',    group="Multi Timeframe Central Pivot Range")
+show_yearly_cpr             = input(true,                           type=input.bool,        title="Yearly Pivot",       inline='yearly',    group="Multi Timeframe Central Pivot Range")
 yearly_pivot_color          = input(color.new(color.yellow, 0),     type=input.color,       title="",                   inline='yearly',    group="Multi Timeframe Central Pivot Range")
-show_yearly_cpr_band        = input(true,                           type=input.bool,        title="Band",               inline='yearly',    group="Multi Timeframe Central Pivot Range")
+show_yearly_cpr_band        = input(true,                           type=input.bool,        title="CPR Band",           inline='yearly',    group="Multi Timeframe Central Pivot Range")
 yearly_cpr_color            = input(color.new(color.blue, 50),      type=input.color,       title="",                   inline='yearly',    group="Multi Timeframe Central Pivot Range")
 
-show_quarterly_cpr          = input(true,                           type=input.bool,        title="Quarterly CPR",      inline='quarterly', group="Multi Timeframe Central Pivot Range")
+show_quarterly_cpr          = input(true,                           type=input.bool,        title="Quarterly Pivot",    inline='quarterly', group="Multi Timeframe Central Pivot Range")
 quarterly_pivot_color       = input(color.new(color.fuchsia, 0),    type=input.color,       title="",                   inline='quarterly', group="Multi Timeframe Central Pivot Range")
-show_quarterly_cpr_band     = input(true,                           type=input.bool,        title="Band",               inline='quarterly', group="Multi Timeframe Central Pivot Range")
+show_quarterly_cpr_band     = input(true,                           type=input.bool,        title="CPR Band",           inline='quarterly', group="Multi Timeframe Central Pivot Range")
 quarterly_cpr_color         = input(color.new(color.olive, 50),     type=input.color,       title="",                   inline='quarterly', group="Multi Timeframe Central Pivot Range")
 
-show_monthly_cpr            = input(false,                          type=input.bool,        title="Monthly CPR",        inline='monthly',   group="Multi Timeframe Central Pivot Range")
+show_monthly_cpr            = input(false,                          type=input.bool,        title="Monthly Pivot",      inline='monthly',   group="Multi Timeframe Central Pivot Range")
 monthly_pivot_color         = input(color.new(color.teal, 0),       type=input.color,       title="",                   inline='monthly',   group="Multi Timeframe Central Pivot Range")
-show_monthly_cpr_band       = input(false,                          type=input.bool,        title="Band",               inline='monthly',   group="Multi Timeframe Central Pivot Range")
+show_monthly_cpr_band       = input(false,                          type=input.bool,        title="CPR Band",           inline='monthly',   group="Multi Timeframe Central Pivot Range")
 monthly_cpr_color           = input(color.new(color.navy, 50),      type=input.color,       title="",                   inline='monthly',   group="Multi Timeframe Central Pivot Range")
 
-show_weekly_cpr             = input(true,                           type=input.bool,        title="Weekly CPR",         inline='weekly',    group="Multi Timeframe Central Pivot Range")
+show_weekly_cpr             = input(true,                           type=input.bool,        title="Weekly Pivot",       inline='weekly',    group="Multi Timeframe Central Pivot Range")
 weekly_pivot_color          = input(color.new(color.orange, 0),     type=input.color,       title="",                   inline='weekly',    group="Multi Timeframe Central Pivot Range")
-show_weekly_cpr_band        = input(true,                           type=input.bool,        title="Band",               inline='weekly',    group="Multi Timeframe Central Pivot Range")
+show_weekly_cpr_band        = input(true,                           type=input.bool,        title="CPR Band",           inline='weekly',    group="Multi Timeframe Central Pivot Range")
 weekly_cpr_color            = input(color.new(color.purple, 50),    type=input.color,       title="",                   inline='weekly',    group="Multi Timeframe Central Pivot Range")
 
-show_daily_cpr              = input(false,                          type=input.bool,        title="Daily CPR",          inline='daily',     group="Multi Timeframe Central Pivot Range")
+show_daily_cpr              = input(false,                          type=input.bool,        title="Daily Pivot",        inline='daily',     group="Multi Timeframe Central Pivot Range")
 daily_pivot_color           = input(color.new(color.red, 0),        type=input.color,       title="",                   inline='daily',     group="Multi Timeframe Central Pivot Range")
-show_daily_cpr_band         = input(false,                          type=input.bool,        title="Band",               inline='daily',     group="Multi Timeframe Central Pivot Range")
+show_daily_cpr_band         = input(false,                          type=input.bool,        title="CPR Band",           inline='daily',     group="Multi Timeframe Central Pivot Range")
 daily_cpr_color             = input(color.new(color.lime, 50),      type=input.color,       title="",                   inline='daily',     group="Multi Timeframe Central Pivot Range")
 
-show_hourly_cpr             = input(false,                          type=input.bool,        title="Hourly CPR",         inline='hourly',    group="Multi Timeframe Central Pivot Range")
+show_hourly_cpr             = input(false,                          type=input.bool,        title="Hourly Pivot",       inline='hourly',    group="Multi Timeframe Central Pivot Range")
 hourly_pivot_color          = input(color.new(color.green, 0),      type=input.color,       title="",                   inline='hourly',    group="Multi Timeframe Central Pivot Range")
-show_hourly_cpr_band        = input(false,                          type=input.bool,        title="Band",               inline='hourly',    group="Multi Timeframe Central Pivot Range")
+show_hourly_cpr_band        = input(false,                          type=input.bool,        title="CPR Band",           inline='hourly',    group="Multi Timeframe Central Pivot Range")
 hourly_cpr_color            = input(color.new(color.gray, 50),      type=input.color,       title="",                   inline='hourly',    group="Multi Timeframe Central Pivot Range")
 
 
@@ -97,34 +97,34 @@ hourly_bc       = hourly_tbc < hourly_ttc ? hourly_tbc : hourly_ttc
 //==============================================================================
 // Yearly CPR   
 yearly_pivot_plot   = plot(show_yearly_cpr ? yearly_pivot : na, title = "Yearly Pivot",   color = color.new(yearly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-yearly_tcline       = plot(show_yearly_cpr and show_yearly_cpr_band ? yearly_tc    : na, title = "Yearly TC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-yearly_bcline       = plot(show_yearly_cpr and show_yearly_cpr_band ? yearly_bc    : na, title = "Yearly BC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(yearly_tcline, yearly_bcline, color = color.new(yearly_cpr_color, show_yearly_cpr and show_yearly_cpr_band ? 95 : 100))
+yearly_tcline       = plot(show_yearly_cpr_band ? yearly_tc    : na, title = "Yearly TC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+yearly_bcline       = plot(show_yearly_cpr_band ? yearly_bc    : na, title = "Yearly BC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(yearly_tcline, yearly_bcline, color = color.new(yearly_cpr_color, show_yearly_cpr_band ? 95 : 100))
 // Quarterly CPR   
 quarterly_pivot_plot   = plot(show_quarterly_cpr ? quarterly_pivot : na, title = "Quarterly Pivot",   color = color.new(quarterly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-quarterly_tcline       = plot(show_quarterly_cpr and show_quarterly_cpr_band ? quarterly_tc    : na, title = "Quarterly TC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-quarterly_bcline       = plot(show_quarterly_cpr and show_quarterly_cpr_band ? quarterly_bc    : na, title = "Quarterly BC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(quarterly_tcline, quarterly_bcline, color = color.new(quarterly_cpr_color, show_quarterly_cpr and show_quarterly_cpr_band ? 95 : 100))
+quarterly_tcline       = plot(show_quarterly_cpr_band ? quarterly_tc    : na, title = "Quarterly TC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+quarterly_bcline       = plot(show_quarterly_cpr_band ? quarterly_bc    : na, title = "Quarterly BC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(quarterly_tcline, quarterly_bcline, color = color.new(quarterly_cpr_color, show_quarterly_cpr_band ? 95 : 100))
 // Monthly CPR   
 monthly_pivot_plot   = plot(show_monthly_cpr ? monthly_pivot : na, title = "Monthly Pivot",   color = color.new(monthly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-monthly_tcline       = plot(show_monthly_cpr and show_monthly_cpr_band ? monthly_tc    : na, title = "Monthly TC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-monthly_bcline       = plot(show_monthly_cpr and show_monthly_cpr_band ? monthly_bc    : na, title = "Monthly BC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(monthly_tcline, monthly_bcline, color = color.new(monthly_cpr_color, show_monthly_cpr and show_monthly_cpr_band ? 95 : 100))
+monthly_tcline       = plot(show_monthly_cpr_band ? monthly_tc    : na, title = "Monthly TC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+monthly_bcline       = plot(show_monthly_cpr_band ? monthly_bc    : na, title = "Monthly BC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(monthly_tcline, monthly_bcline, color = color.new(monthly_cpr_color, show_monthly_cpr_band ? 95 : 100))
 // Weekly CPR   
 weekly_pivot_plot   = plot(show_weekly_cpr ? weekly_pivot : na, title = "Weekly Pivot",   color = color.new(weekly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-weekly_tcline       = plot(show_weekly_cpr and show_weekly_cpr_band ? weekly_tc    : na, title = "Weekly TC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-weekly_bcline       = plot(show_weekly_cpr and show_weekly_cpr_band ? weekly_bc    : na, title = "Weekly BC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(weekly_tcline, weekly_bcline, color = color.new(weekly_cpr_color, show_weekly_cpr and show_weekly_cpr_band ? 95 : 100))
+weekly_tcline       = plot(show_weekly_cpr_band ? weekly_tc    : na, title = "Weekly TC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+weekly_bcline       = plot(show_weekly_cpr_band ? weekly_bc    : na, title = "Weekly BC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(weekly_tcline, weekly_bcline, color = color.new(weekly_cpr_color, show_weekly_cpr_band ? 95 : 100))
 // Daily CPR   
 daily_pivot_plot   = plot(show_daily_cpr ? daily_pivot : na, title = "Daily Pivot",   color = color.new(daily_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-daily_tcline       = plot(show_daily_cpr and show_daily_cpr_band ? daily_tc    : na, title = "Daily TC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-daily_bcline       = plot(show_daily_cpr and show_daily_cpr_band ? daily_bc    : na, title = "Daily BC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(daily_tcline, daily_bcline, color = color.new(daily_cpr_color, show_daily_cpr and show_daily_cpr_band ? 95 : 100))
+daily_tcline       = plot(show_daily_cpr_band ? daily_tc    : na, title = "Daily TC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+daily_bcline       = plot(show_daily_cpr_band ? daily_bc    : na, title = "Daily BC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(daily_tcline, daily_bcline, color = color.new(daily_cpr_color, show_daily_cpr_band ? 95 : 100))
 // Hourly CPR   
 hourly_pivot_plot   = plot(show_hourly_cpr ? hourly_pivot : na, title = "Hourly Pivot",   color = color.new(hourly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-hourly_tcline       = plot(show_hourly_cpr and show_hourly_cpr_band ? hourly_tc    : na, title = "Hourly TC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-hourly_bcline       = plot(show_hourly_cpr and show_hourly_cpr_band ? hourly_bc    : na, title = "Hourly BC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-fill(hourly_tcline, hourly_bcline, color = color.new(hourly_cpr_color, show_hourly_cpr and show_hourly_cpr_band ? 95 : 100))
+hourly_tcline       = plot(show_hourly_cpr_band ? hourly_tc    : na, title = "Hourly TC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+hourly_bcline       = plot(show_hourly_cpr_band ? hourly_bc    : na, title = "Hourly BC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+fill(hourly_tcline, hourly_bcline, color = color.new(hourly_cpr_color, show_hourly_cpr_band ? 95 : 100))
 
 
 // // Pivot Lables 
