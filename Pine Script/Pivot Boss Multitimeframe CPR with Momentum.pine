@@ -14,19 +14,29 @@ show_yearly_cpr_band             = input(true,   type=input.bool,               
 yearly_cpr_color                = input(color.new(color.blue, 50),              type = input.color,     title="", inline='yearly', group="Central Pivot Range")
 
 show_quarterly_cpr              = input(true,   type=input.bool,                            title="Quarterly CPR", inline='quarterly', group="Central Pivot Range")
+quarterly_pivot_color           = input(color.new(color.fuchsia, 0),            type = input.color,     title="", inline='quarterly',       group="Central Pivot Range")
 show_quarterly_cpr_band         = input(true,   type=input.bool,                            title="Band", inline='quarterly', group="Central Pivot Range")
+quarterly_cpr_color             = input(color.new(color.olive, 50),             type = input.color,     title="", inline='quarterly',    group="Central Pivot Range")
 
 show_monthly_cpr                 = input(false,  type=input.bool,                            title="Show Monthly CPR", inline='monthly', group="Central Pivot Range")
+monthly_pivot_color             = input(color.new(color.teal, 0),               type = input.color,     title="", inline='monthly',          group="Central Pivot Range")
 show_monthly_cpr_band                 = input(false,  type=input.bool,                            title="Band", inline='monthly', group="Central Pivot Range")
+monthly_cpr_color               = input(color.new(color.navy, 50),              type = input.color,     title="", inline='monthly',       group="Central Pivot Range")
 
 show_weekly_cpr                  = input(true,   type=input.bool,                            title="Show Weekly CPR", inline='weekly', group="Central Pivot Range")
+weekly_pivot_color              = input(color.new(color.orange, 0),             type = input.color,     title="", inline='weekly',           group="Central Pivot Range")
 show_weekly_cpr_band             = input(true,   type=input.bool,                            title="Band", inline='weekly', group="Central Pivot Range")
+weekly_cpr_color                = input(color.new(color.purple, 50),            type = input.color,     title="", inline='weekly',       group="Central Pivot Range")
 
 show_daily_cpr                   = input(false,  type=input.bool,                            title="Show Daily CPR", inline='daily', group="Central Pivot Range")
+daily_pivot_color               = input(color.new(color.red, 0),                type = input.color,     title="",   inline='daily',         group="Central Pivot Range")
 show_daily_cpr_band                   = input(false,  type=input.bool,                            title="Band", inline='daily', group="Central Pivot Range")
+daily_cpr_color                 = input(color.new(color.lime, 50),              type = input.color,     title="", inline='daily',         group="Central Pivot Range")
 
 show_hourly_cpr                  = input(false,  type=input.bool,                            title="Show Hourly CPR (Intraday Only)",  inline='hourly', group="Central Pivot Range")
+hourly_pivot_color              = input(color.new(color.green, 0),              type = input.color,     title="", inline='hourly',           group="Central Pivot Range")
 show_hourly_cpr_band                  = input(false,  type=input.bool,                            title="Band", inline='hourly', group="Central Pivot Range")
+hourly_cpr_color                = input(color.new(color.gray, 50),              type = input.color,     title="", inline='hourly',       group="Central Pivot Range")
 
 
 show_labels                     = input(true,   type=input.bool,                            title="Show CPR Lables",                          group="Central Pivot Range")
@@ -35,18 +45,16 @@ show_next_day_pivot             = input(false,  type=input.bool,                
 
 
 
-// yearly_pivot_color              = input(color.new(color.yellow, 0),             type = input.color,     title="Yearly Pivot",           group="Color Scheme")
-// yearly_cpr_color                = input(color.new(color.blue, 50),              type = input.color,     title="Yearly CPR Band",        group="Color Scheme")
-quarterly_pivot_color           = input(color.new(color.fuchsia, 0),            type = input.color,     title="Quarterly Pivot",        group="Color Scheme")
-quarterly_cpr_color             = input(color.new(color.olive, 50),             type = input.color,     title="Quarterly CPR Band",     group="Color Scheme")
-monthly_pivot_color             = input(color.new(color.teal, 0),               type = input.color,     title="Monthly Pivot",          group="Color Scheme")
-monthly_cpr_color               = input(color.new(color.navy, 50),              type = input.color,     title="Monthly CPR Band",       group="Color Scheme")
-weekly_pivot_color              = input(color.new(color.orange, 0),             type = input.color,     title="Weekly Pivot",           group="Color Scheme")
-weekly_cpr_color                = input(color.new(color.purple, 50),            type = input.color,     title="Weekly CPR Band",        group="Color Scheme")
-daily_pivot_color               = input(color.new(color.red, 0),                type = input.color,     title="Daily Pivot",            group="Color Scheme")
-daily_cpr_color                 = input(color.new(color.lime, 50),              type = input.color,     title="Daily CPR Band",         group="Color Scheme")
-hourly_pivot_color              = input(color.new(color.green, 0),              type = input.color,     title="Hourly Pivot",           group="Color Scheme")
-hourly_cpr_color                = input(color.new(color.gray, 50),              type = input.color,     title="Hourly CPR Band",        group="Color Scheme")
+// quarterly_pivot_color           = input(color.new(color.fuchsia, 0),            type = input.color,     title="Quarterly Pivot",        group="Central Pivot Range")
+// quarterly_cpr_color             = input(color.new(color.olive, 50),             type = input.color,     title="Quarterly CPR Band",     group="Central Pivot Range")
+// monthly_pivot_color             = input(color.new(color.teal, 0),               type = input.color,     title="Monthly Pivot",          group="Central Pivot Range")
+// monthly_cpr_color               = input(color.new(color.navy, 50),              type = input.color,     title="Monthly CPR Band",       group="Central Pivot Range")
+// weekly_pivot_color              = input(color.new(color.orange, 0),             type = input.color,     title="Weekly Pivot",           group="Central Pivot Range")
+// weekly_cpr_color                = input(color.new(color.purple, 50),            type = input.color,     title="Weekly CPR Band",        group="Central Pivot Range")
+// daily_pivot_color               = input(color.new(color.red, 0),                type = input.color,     title="Daily Pivot",            group="Central Pivot Range")
+// daily_cpr_color                 = input(color.new(color.lime, 50),              type = input.color,     title="Daily CPR Band",         group="Central Pivot Range")
+// hourly_pivot_color              = input(color.new(color.green, 0),              type = input.color,     title="Hourly Pivot",           group="Central Pivot Range")
+// hourly_cpr_color                = input(color.new(color.gray, 50),              type = input.color,     title="Hourly CPR Band",        group="Central Pivot Range")
 
 
 // Calculations  
