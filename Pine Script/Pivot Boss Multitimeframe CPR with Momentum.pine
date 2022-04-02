@@ -96,34 +96,34 @@ hourly_bc       = hourly_tbc < hourly_ttc ? hourly_tbc : hourly_ttc
 // Plots   
 //==============================================================================
 // Yearly CPR   
-yearly_pivot_plot   = plot(show_yearly_cpr ? yearly_pivot : na, title = "Yearly Pivot",   color = color.new(yearly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-yearly_tcline       = plot(show_yearly_cpr_band ? yearly_tc    : na, title = "Yearly TC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-yearly_bcline       = plot(show_yearly_cpr_band ? yearly_bc    : na, title = "Yearly BC",      color = color.new(yearly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+yearly_pivot_plot       = plot(show_yearly_cpr ? yearly_pivot           : na, title = "Yearly Pivot",       color = color.new(yearly_pivot_color, 0),    linewidth = 1, style = plot.style_circles)
+yearly_tcline           = plot(show_yearly_cpr_band ? yearly_tc         : na, title = "Yearly TC",          color = color.new(yearly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
+yearly_bcline           = plot(show_yearly_cpr_band ? yearly_bc         : na, title = "Yearly BC",          color = color.new(yearly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
 fill(yearly_tcline, yearly_bcline, color = color.new(yearly_cpr_color, show_yearly_cpr_band ? 95 : 100))
 // Quarterly CPR   
-quarterly_pivot_plot   = plot(show_quarterly_cpr ? quarterly_pivot : na, title = "Quarterly Pivot",   color = color.new(quarterly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-quarterly_tcline       = plot(show_quarterly_cpr_band ? quarterly_tc    : na, title = "Quarterly TC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-quarterly_bcline       = plot(show_quarterly_cpr_band ? quarterly_bc    : na, title = "Quarterly BC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+quarterly_pivot_plot    = plot(show_quarterly_cpr ? quarterly_pivot     : na, title = "Quarterly Pivot",    color = color.new(quarterly_pivot_color, 0), linewidth = 1, style = plot.style_circles)
+quarterly_tcline        = plot(show_quarterly_cpr_band ? quarterly_tc   : na, title = "Quarterly TC",       color = color.new(quarterly_cpr_color, 0),   linewidth = 0, style = plot.style_circles)
+quarterly_bcline        = plot(show_quarterly_cpr_band ? quarterly_bc   : na, title = "Quarterly BC",       color = color.new(quarterly_cpr_color, 0),   linewidth = 0, style = plot.style_circles)
 fill(quarterly_tcline, quarterly_bcline, color = color.new(quarterly_cpr_color, show_quarterly_cpr_band ? 95 : 100))
 // Monthly CPR   
-monthly_pivot_plot   = plot(show_monthly_cpr ? monthly_pivot : na, title = "Monthly Pivot",   color = color.new(monthly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-monthly_tcline       = plot(show_monthly_cpr_band ? monthly_tc    : na, title = "Monthly TC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-monthly_bcline       = plot(show_monthly_cpr_band ? monthly_bc    : na, title = "Monthly BC",      color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+monthly_pivot_plot      = plot(show_monthly_cpr ? monthly_pivot         : na, title = "Monthly Pivot",      color = color.new(monthly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
+monthly_tcline          = plot(show_monthly_cpr_band ? monthly_tc       : na, title = "Monthly TC",         color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+monthly_bcline          = plot(show_monthly_cpr_band ? monthly_bc       : na, title = "Monthly BC",         color = color.new(monthly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
 fill(monthly_tcline, monthly_bcline, color = color.new(monthly_cpr_color, show_monthly_cpr_band ? 95 : 100))
 // Weekly CPR   
-weekly_pivot_plot   = plot(show_weekly_cpr ? weekly_pivot : na, title = "Weekly Pivot",   color = color.new(weekly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-weekly_tcline       = plot(show_weekly_cpr_band ? weekly_tc    : na, title = "Weekly TC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-weekly_bcline       = plot(show_weekly_cpr_band ? weekly_bc    : na, title = "Weekly BC",      color = color.new(weekly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+weekly_pivot_plot       = plot(show_weekly_cpr ? weekly_pivot           : na, title = "Weekly Pivot",       color = color.new(weekly_pivot_color, 0),    linewidth = 1, style = plot.style_circles)
+weekly_tcline           = plot(show_weekly_cpr_band ? weekly_tc         : na, title = "Weekly TC",          color = color.new(weekly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
+weekly_bcline           = plot(show_weekly_cpr_band ? weekly_bc         : na, title = "Weekly BC",          color = color.new(weekly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
 fill(weekly_tcline, weekly_bcline, color = color.new(weekly_cpr_color, show_weekly_cpr_band ? 95 : 100))
 // Daily CPR   
-daily_pivot_plot   = plot(show_daily_cpr ? daily_pivot : na, title = "Daily Pivot",   color = color.new(daily_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-daily_tcline       = plot(show_daily_cpr_band ? daily_tc    : na, title = "Daily TC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-daily_bcline       = plot(show_daily_cpr_band ? daily_bc    : na, title = "Daily BC",      color = color.new(daily_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+daily_pivot_plot        = plot(show_daily_cpr ? daily_pivot             : na, title = "Daily Pivot",        color = color.new(daily_pivot_color, 0),     linewidth = 1, style = plot.style_circles)
+daily_tcline            = plot(show_daily_cpr_band ? daily_tc           : na, title = "Daily TC",           color = color.new(daily_cpr_color, 0),       linewidth = 0, style = plot.style_circles)
+daily_bcline            = plot(show_daily_cpr_band ? daily_bc           : na, title = "Daily BC",           color = color.new(daily_cpr_color, 0),       linewidth = 0, style = plot.style_circles)
 fill(daily_tcline, daily_bcline, color = color.new(daily_cpr_color, show_daily_cpr_band ? 95 : 100))
 // Hourly CPR   
-hourly_pivot_plot   = plot(show_hourly_cpr ? hourly_pivot : na, title = "Hourly Pivot",   color = color.new(hourly_pivot_color, 0),   linewidth = 1, style = plot.style_circles)
-hourly_tcline       = plot(show_hourly_cpr_band ? hourly_tc    : na, title = "Hourly TC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
-hourly_bcline       = plot(show_hourly_cpr_band ? hourly_bc    : na, title = "Hourly BC",      color = color.new(hourly_cpr_color, 0),     linewidth = 0, style = plot.style_circles)
+hourly_pivot_plot       = plot(show_hourly_cpr ? hourly_pivot           : na, title = "Hourly Pivot",       color = color.new(hourly_pivot_color, 0),    linewidth = 1, style = plot.style_circles)
+hourly_tcline           = plot(show_hourly_cpr_band ? hourly_tc         : na, title = "Hourly TC",          color = color.new(hourly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
+hourly_bcline           = plot(show_hourly_cpr_band ? hourly_bc         : na, title = "Hourly BC",          color = color.new(hourly_cpr_color, 0),      linewidth = 0, style = plot.style_circles)
 fill(hourly_tcline, hourly_bcline, color = color.new(hourly_cpr_color, show_hourly_cpr_band ? 95 : 100))
 
 
