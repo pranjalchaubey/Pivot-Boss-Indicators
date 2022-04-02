@@ -1,0 +1,148 @@
+//@version=4
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © pranjalchaubey
+
+//Structural Pivots
+study(title="[CP]Pivot Boss Multi Timeframe CPR with MACD", shorttitle="[CP]Pivot Boss CPR + MACD", overlay=true, max_labels_count=500)
+
+
+// User Inputs 
+//==============================================================================
+show_yearly_cpr                  = input(true,   type=input.bool,                            title="Show Yearly CPR",                                   group="Central Pivot Range")
+show_quarterly_cpr               = input(true,   type=input.bool,                            title="Show Quarterly CPR",                                   group="Central Pivot Range")
+show_monthly_cpr                 = input(true,   type=input.bool,                            title="Show Monthly CPR",                                   group="Central Pivot Range")
+show_weekly_cpr                  = input(true,   type=input.bool,                            title="Show Weekly CPR",                                   group="Central Pivot Range")
+show_daily_cpr                   = input(false,  type=input.bool,                            title="Show Daily CPR",                                   group="Central Pivot Range")
+show_hourly_cpr                  = input(false,  type=input.bool,                            title="Show Hourly CPR (Intraday Only)",               group="Central Pivot Range")
+
+
+show_labels                     = input(true,   type=input.bool,                            title="Show CPR Lables",                          group="Central Pivot Range")
+show_next_day_pivot             = input(false,  type=input.bool,                            title="Show Next Time Period Pivots",               group="Central Pivot Range")
+
+
+
+
+yearly_pivot_color              = input(color.new(color.yellow, 0),             type = input.color,     title="Yearly Pivot",           group="Color Scheme")
+yearly_cpr_color                = input(color.new(color.blue, 50),              type = input.color,     title="Yearly CPR Band",        group="Color Scheme")
+quarterly_pivot_color           = input(color.new(color.fuchsia, 0),            type = input.color,     title="Quarterly Pivot",        group="Color Scheme")
+quarterly_cpr_color             = input(color.new(color.olive, 50),             type = input.color,     title="Quarterly CPR Band",     group="Color Scheme")
+monthly_pivot_color             = input(color.new(color.teal, 0),               type = input.color,     title="Monthly Pivot",          group="Color Scheme")
+monthly_cpr_color               = input(color.new(color.navy, 50),              type = input.color,     title="Monthly CPR Band",       group="Color Scheme")
+weekly_pivot_color              = input(color.new(color.orange, 0),             type = input.color,     title="Weekly Pivot",           group="Color Scheme")
+weekly_cpr_color                = input(color.new(color.purple, 50),            type = input.color,     title="Weekly CPR Band",        group="Color Scheme")
+daily_pivot_color               = input(color.new(color.red, 0),                type = input.color,     title="Daily Pivot",            group="Color Scheme")
+daily_cpr_color                 = input(color.new(color.lime, 50),              type = input.color,     title="Daily CPR Band",         group="Color Scheme")
+hourly_pivot_color              = input(color.new(color.green, 0),              type = input.color,     title="Hourly Pivot",           group="Color Scheme")
+hourly_cpr_color                = input(color.new(color.gray, 50),              type = input.color,     title="Hourly CPR Band",        group="Color Scheme")
+
+
+// Calculations  
+//==============================================================================
+// Floor Pivots 
+// Central Pivot 
+pivot = (high + low + close) / 3.0
+// Central Pivot Range 
+temp_bc = (high + low) / 2 
+temp_tc = (pivot - temp_bc) + pivot 
+tc = temp_tc > temp_bc ? temp_tc : temp_bc
+bc = temp_bc < temp_tc ? temp_bc : temp_tc
+
+
+// Multi Timeframe CPR 
+//==============================================================================
+yearly_pivot    = security(syminfo.tickerid, '12M',     show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+yearly_tbc      = security(syminfo.tickerid, '12M',     show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+yearly_ttc      = security(syminfo.tickerid, '12M',     show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+yearly_tc       = yearly_ttc > yearly_tbc ? yearly_ttc : yearly_tbc
+yearly_bc       = yearly_tbc < yearly_ttc ? yearly_tbc : yearly_ttc
+quarterly_pivot = security(syminfo.tickerid, '3M',      show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+quarterly_tbc   = security(syminfo.tickerid, '3M',      show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+quarterly_ttc   = security(syminfo.tickerid, '3M',      show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+quarterly_tc    = quarterly_ttc > quarterly_tbc ? quarterly_ttc : quarterly_tbc
+quarterly_bc    = quarterly_tbc < quarterly_ttc ? quarterly_tbc : quarterly_ttc
+monthly_pivot   = security(syminfo.tickerid, 'M',       show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+monthly_tbc     = security(syminfo.tickerid, 'M',       show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+monthly_ttc     = security(syminfo.tickerid, 'M',       show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+monthly_tc      = monthly_ttc > monthly_tbc ? monthly_ttc : monthly_tbc
+monthly_bc      = monthly_tbc < monthly_ttc ? monthly_tbc : monthly_ttc
+weekly_pivot    = security(syminfo.tickerid, 'W',       show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+weekly_tbc      = security(syminfo.tickerid, 'W',       show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+weekly_ttc      = security(syminfo.tickerid, 'W',       show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+weekly_tc       = weekly_ttc > weekly_tbc ? weekly_ttc : weekly_tbc
+weekly_bc       = weekly_tbc < weekly_ttc ? weekly_tbc : weekly_ttc
+daily_pivot     = security(syminfo.tickerid, 'D',       show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+daily_tbc       = security(syminfo.tickerid, 'D',       show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_ttc       = security(syminfo.tickerid, 'D',       show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+daily_tc        = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
+daily_bc        = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
+hourly_pivot    = security(syminfo.tickerid, '60',      show_next_day_pivot ? pivot : pivot[1],        barmerge.gaps_off, barmerge.lookahead_on)
+hourly_tbc      = security(syminfo.tickerid, '60',      show_next_day_pivot ? temp_bc : temp_bc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+hourly_ttc      = security(syminfo.tickerid, '60',      show_next_day_pivot ? temp_tc : temp_tc[1],    barmerge.gaps_off, barmerge.lookahead_on)
+hourly_tc       = hourly_ttc > hourly_tbc ? hourly_ttc : hourly_tbc
+hourly_bc       = hourly_tbc < hourly_ttc ? hourly_tbc : hourly_ttc
+
+
+// Plots   
+//==============================================================================
+// Yearly CPR   
+yearly_pivot_plot   = plot(show_yearly_cpr ? yearly_pivot : na, title = "Yearly Pivot",   color = color.new(yearly_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+yearly_tcline       = plot(show_yearly_cpr ? yearly_tc    : na, title = "Yearly TC",      color = color.new(yearly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+yearly_bcline       = plot(show_yearly_cpr ? yearly_bc    : na, title = "Yearly BC",      color = color.new(yearly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(yearly_tcline, yearly_bcline, color = color.new(yearly_cpr_color, show_yearly_cpr ? 95 : 100))
+// Quarterly CPR   
+quarterly_pivot_plot   = plot(show_quarterly_cpr ? quarterly_pivot : na, title = "Quarterly Pivot",   color = color.new(quarterly_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+quarterly_tcline       = plot(show_quarterly_cpr ? quarterly_tc    : na, title = "Quarterly TC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+quarterly_bcline       = plot(show_quarterly_cpr ? quarterly_bc    : na, title = "Quarterly BC",      color = color.new(quarterly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(quarterly_tcline, quarterly_bcline, color = color.new(quarterly_cpr_color, show_quarterly_cpr ? 95 : 100))
+// Monthly CPR   
+monthly_pivot_plot   = plot(show_monthly_cpr ? monthly_pivot : na, title = "Monthly Pivot",   color = color.new(monthly_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+monthly_tcline       = plot(show_monthly_cpr ? monthly_tc    : na, title = "Monthly TC",      color = color.new(monthly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+monthly_bcline       = plot(show_monthly_cpr ? monthly_bc    : na, title = "Monthly BC",      color = color.new(monthly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(monthly_tcline, monthly_bcline, color = color.new(monthly_cpr_color, show_monthly_cpr ? 95 : 100))
+// Weekly CPR   
+weekly_pivot_plot   = plot(show_weekly_cpr ? weekly_pivot : na, title = "Weekly Pivot",   color = color.new(weekly_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+weekly_tcline       = plot(show_weekly_cpr ? weekly_tc    : na, title = "Weekly TC",      color = color.new(weekly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+weekly_bcline       = plot(show_weekly_cpr ? weekly_bc    : na, title = "Weekly BC",      color = color.new(weekly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(weekly_tcline, weekly_bcline, color = color.new(weekly_cpr_color, show_weekly_cpr ? 95 : 100))
+// Daily CPR   
+daily_pivot_plot   = plot(show_daily_cpr ? daily_pivot : na, title = "Daily Pivot",   color = color.new(daily_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+daily_tcline       = plot(show_daily_cpr ? daily_tc    : na, title = "Daily TC",      color = color.new(daily_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+daily_bcline       = plot(show_daily_cpr ? daily_bc    : na, title = "Daily BC",      color = color.new(daily_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(daily_tcline, daily_bcline, color = color.new(daily_cpr_color, show_daily_cpr ? 95 : 100))
+// Hourly CPR   
+hourly_pivot_plot   = plot(show_hourly_cpr ? hourly_pivot : na, title = "Hourly Pivot",   color = color.new(hourly_pivot_color, 0),   linewidth = 2, style = plot.style_circles)
+hourly_tcline       = plot(show_hourly_cpr ? hourly_tc    : na, title = "Hourly TC",      color = color.new(hourly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+hourly_bcline       = plot(show_hourly_cpr ? hourly_bc    : na, title = "Hourly BC",      color = color.new(hourly_cpr_color, 0),     linewidth = 1, style = plot.style_circles)
+fill(hourly_tcline, hourly_bcline, color = color.new(hourly_cpr_color, show_hourly_cpr ? 95 : 100))
+
+
+// // Pivot Lables 
+// if show_labels
+//     chper = time - time[1]
+//     chper := change(chper) > 0 ? chper[1] : chper
+
+//     var label plabel = na 
+//     var label s1label = na, var label s2label = na, var label s3label = na, var label s4label = na
+//     var label r1label = na, var label r2label = na, var label r3label = na, var label r4label = na
+
+//     label.delete(plabel)
+//     label.delete(s1label), label.delete(s2label), label.delete(s3label), label.delete(s4label)
+//     label.delete(r1label), label.delete(r2label), label.delete(r3label), label.delete(r4label)
+//     if show_floor_pivots and show_daily_pivot
+//         plabel  := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_pivot+daily_atr_dilation    : daily_pivot,  text = "Pivot", color = floor_pivots_p_color, textcolor=color.black, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price) 
+//     if show_floor_pivots and show_daily_r1
+//         r1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r1+daily_atr_dilation       : daily_r1,     text = "R1",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_r2
+//         r2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r2+daily_atr_dilation       : daily_r2,     text = "R2",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_r3
+//         r3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r3+daily_atr_dilation       : daily_r3,     text = "R3",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_r4
+//         r4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_r4+daily_atr_dilation       : daily_r4,     text = "R4",    color = floor_pivots_r_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_s1
+//         s1label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s1+daily_atr_dilation       : daily_s1,     text = "S1",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_s2
+//         s2label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s2+daily_atr_dilation       : daily_s2,     text = "S2",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_s3
+//         s3label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s3+daily_atr_dilation       : daily_s3,     text = "S3",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
+//     if show_floor_pivots and show_daily_s4
+//         s4label := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = atr_dilation and timeframe.isintraday ? daily_s4+daily_atr_dilation       : daily_s4,     text = "S4",    color = floor_pivots_s_color, textcolor=color.white, style=label.style_labeldown, xloc = xloc.bar_time, yloc=yloc.price)
