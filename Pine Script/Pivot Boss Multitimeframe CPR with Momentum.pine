@@ -71,6 +71,16 @@ temp_tc = pivot - temp_bc + pivot
 tc = temp_tc > temp_bc ? temp_tc : temp_bc
 bc = temp_bc < temp_tc ? temp_bc : temp_tc
 // MACD
+fast_ma = sma_source == "SMA" ? ta.sma(src, fast_length) : ta.ema(src, fast_length)
+slow_ma = sma_source == "SMA" ? ta.sma(src, slow_length) : ta.ema(src, slow_length)
+macd = fast_ma - slow_ma
+signal = sma_signal == "SMA" ? ta.sma(macd, signal_length) : ta.ema(macd, signal_length)
+hist = macd - signal
+macd_bullcross = ta.crossover(macd, signal)
+macd_bearcross = ta.crossover(signal, macd)
+// plot(hist, title="Histogram", style=plot.style_columns, color=(hist>=0 ? (hist[1] < hist ? col_grow_above : col_fall_above) : (hist[1] < hist ? col_grow_below : col_fall_below)))
+// plot(macd, title="MACD", color=col_macd)
+// plot(signal, title="Signal", color=col_signal)
 
 
 // Multi Timeframe CPR 
