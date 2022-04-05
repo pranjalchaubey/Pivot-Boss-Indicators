@@ -39,13 +39,26 @@ show_hourly_cpr_band        = input.bool(false,                         title='C
 hourly_cpr_color            = input.color(color.new(color.gray, 50),    title='',                   inline='hourly',    group='Multi Timeframe Central Pivot Range')
 
 
-show_labels                 = input.bool(true,                          title='Show CPR Lables',                        group='Multi Timeframe Central Pivot Range')
-show_next_day_pivot         = input.bool(false,                         title='Show Next Time Period Pivots',           group='Multi Timeframe Central Pivot Range')
+show_labels                 = input.bool(true,                          title='Show CPR Lables',                        group='CPR Configuration')
+show_next_day_pivot         = input.bool(false,                         title='Show Next Time Period Pivots',           group='CPR Configuration')
 
 
 
 
-
+show_macd_crossovers        = input.bool(true,                          title="Show MACD Crossovers on Chart",          group="MACD Momentum")
+show_macd_histogram         = input.bool(true,                          title="Indicate MACD Histogram on Chart",       group="MACD Momentum")
+fast_length                 = input.int(12,                             title="Fast Length",                            group="MACD Momentum")
+slow_length                 = input.int(26,                             title="Slow Length",                            group="MACD Momentum")
+src                         = input.source(close,                       title="Source",                                 group="MACD Momentum")
+signal_length               = input.int(9, minval=1, maxval=50,         title="Signal Smoothing",                       group="MACD Momentum")
+sma_source                  = input.string("EMA", options=["SMA","EMA"],title="Oscillator MA Type",                     group="MACD Momentum")
+sma_signal                  = input.string("EMA", options=["SMA","EMA"],title="Signal Line MA Type",                    group="MACD Momentum")
+macd_bullcross_color        = input(#2962FF,                            title="Bullish MACD Cross",                     group="MACD Momentum")
+macd_bearcross_color        = input(#FF6D00,                            title="Bearish MACD Cross",                     group="MACD Momentum")
+macd_grow_above_color       = input(#26A69A,                            title="Above   Grow",       inline="Above",     group="MACD Momentum")
+macd_fall_above_color       = input(#B2DFDB,                            title="Fall",               inline="Above",     group="MACD Momentum")
+macd_grow_below_color       = input(#FFCDD2,                            title="Below Grow",         inline="Below",     group="MACD Momentum")
+macd_fall_below_color       = input(#FF5252,                            title="Fall",               inline="Below",     group="MACD Momentum")
 
 // Calculations  
 //==============================================================================
@@ -57,6 +70,7 @@ temp_bc = (high + low) / 2
 temp_tc = pivot - temp_bc + pivot
 tc = temp_tc > temp_bc ? temp_tc : temp_bc
 bc = temp_bc < temp_tc ? temp_bc : temp_tc
+// MACD
 
 
 // Multi Timeframe CPR 
