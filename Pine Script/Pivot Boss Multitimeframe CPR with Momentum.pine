@@ -43,8 +43,6 @@ show_labels                 = input.bool(true,                          title='S
 show_next_day_pivot         = input.bool(false,                         title='Show Next Time Period Pivots',           group='CPR Configuration')
 
 
-
-
 show_macd_crossovers        = input.bool(true,                          title="Show MACD Crossovers on Chart",          group="MACD Momentum")
 show_macd_histogram         = input.bool(true,                          title="Indicate MACD Histogram on Chart",       group="MACD Momentum")
 fast_length                 = input.int(12,                             title="Fast Length",                            group="MACD Momentum")
@@ -53,12 +51,13 @@ src                         = input.source(close,                       title="S
 signal_length               = input.int(9, minval=1, maxval=50,         title="Signal Smoothing",                       group="MACD Momentum")
 sma_source                  = input.string("EMA", options=["SMA","EMA"],title="Oscillator MA Type",                     group="MACD Momentum")
 sma_signal                  = input.string("EMA", options=["SMA","EMA"],title="Signal Line MA Type",                    group="MACD Momentum")
-macd_bullcross_color        = input(#2962FF,                            title="Bullish MACD Cross",                     group="MACD Momentum")
-macd_bearcross_color        = input(#FF6D00,                            title="Bearish MACD Cross",                     group="MACD Momentum")
+macd_bullcross_color        = input(color.white,                        title="Bullish MACD Cross",                     group="MACD Momentum")
+macd_bearcross_color        = input(color.white,                        title="Bearish MACD Cross",                     group="MACD Momentum")
 macd_grow_above_color       = input(#26A69A,                            title="Above   Grow",       inline="Above",     group="MACD Momentum")
 macd_fall_above_color       = input(#B2DFDB,                            title="Fall",               inline="Above",     group="MACD Momentum")
 macd_grow_below_color       = input(#FFCDD2,                            title="Below Grow",         inline="Below",     group="MACD Momentum")
 macd_fall_below_color       = input(#FF5252,                            title="Fall",               inline="Below",     group="MACD Momentum")
+
 
 // Calculations  
 //==============================================================================
@@ -181,3 +180,11 @@ if show_labels
         daily_pivot_label       := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_pivot,      text = "Daily Pivot",       color = daily_pivot_color,      textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
     if show_hourly_cpr
         hourly_pivot_label      := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly_pivot,     text = "Hourly Pivot",      color = hourly_pivot_color,     textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
+
+
+// MACD Crossovers 
+if show_macd_crossovers
+    if macd_bullcross
+        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup, size=size.auto, tooltip="MACD Bullcross")
+    if macd_bearcross
+        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Bearcross")
