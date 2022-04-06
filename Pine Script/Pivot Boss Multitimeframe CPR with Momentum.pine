@@ -33,6 +33,16 @@ daily_pivot_color           = input.color(color.new(color.red, 0),      title=''
 show_daily_cpr_band         = input.bool(false,                         title='CPR Band',           inline='daily',     group='Multi Timeframe Central Pivot Range')
 daily_cpr_color             = input.color(color.new(color.lime, 50),    title='',                   inline='daily',     group='Multi Timeframe Central Pivot Range')
 
+show_hourly6_cpr            = input.bool(false,                         title='6 Hourly Pivot',     inline='hourly6',   group='Multi Timeframe Central Pivot Range')
+hourly6_pivot_color         = input.color(color.new(color.green, 0),    title='',                   inline='hourly6',   group='Multi Timeframe Central Pivot Range')
+show_hourly6_cpr_band       = input.bool(false,                         title='CPR Band',           inline='hourly6',   group='Multi Timeframe Central Pivot Range')
+hourly6_cpr_color           = input.color(color.new(color.gray, 50),    title='',                   inline='hourly6',   group='Multi Timeframe Central Pivot Range')
+
+show_hourly4_cpr            = input.bool(false,                         title='4 Hourly Pivot',     inline='hourly4',   group='Multi Timeframe Central Pivot Range')
+hourly4_pivot_color         = input.color(color.new(color.green, 0),    title='',                   inline='hourly4',   group='Multi Timeframe Central Pivot Range')
+show_hourly4_cpr_band       = input.bool(false,                         title='CPR Band',           inline='hourly4',   group='Multi Timeframe Central Pivot Range')
+hourly4_cpr_color           = input.color(color.new(color.gray, 50),    title='',                   inline='hourly4',   group='Multi Timeframe Central Pivot Range')
+
 show_hourly_cpr             = input.bool(false,                         title='Hourly Pivot',       inline='hourly',    group='Multi Timeframe Central Pivot Range')
 hourly_pivot_color          = input.color(color.new(color.green, 0),    title='',                   inline='hourly',    group='Multi Timeframe Central Pivot Range')
 show_hourly_cpr_band        = input.bool(false,                         title='CPR Band',           inline='hourly',    group='Multi Timeframe Central Pivot Range')
@@ -78,9 +88,6 @@ signal = sma_signal == "SMA" ? ta.sma(macd, signal_length) : ta.ema(macd, signal
 hist = macd - signal
 macd_bullcross = ta.crossover(macd, signal)
 macd_bearcross = ta.crossover(signal, macd)
-// plot(hist, title="Histogram", style=plot.style_columns, color=(hist>=0 ? (hist[1] < hist ? col_grow_above : col_fall_above) : (hist[1] < hist ? col_grow_below : col_fall_below)))
-// plot(macd, title="MACD", color=col_macd)
-// plot(signal, title="Signal", color=col_signal)
 
 
 // Multi Timeframe CPR 
@@ -110,6 +117,16 @@ daily_tbc           = request.security(syminfo.tickerid, 'D',   show_next_day_pi
 daily_ttc           = request.security(syminfo.tickerid, 'D',   show_next_day_pivot ? temp_tc   : temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
 daily_tc            = daily_ttc > daily_tbc ? daily_ttc : daily_tbc
 daily_bc            = daily_tbc < daily_ttc ? daily_tbc : daily_ttc
+hourly6_pivot       = request.security(syminfo.tickerid, '360', show_next_day_pivot ? pivot     : pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+hourly6_tbc         = request.security(syminfo.tickerid, '360', show_next_day_pivot ? temp_bc   : temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+hourly6_ttc         = request.security(syminfo.tickerid, '360', show_next_day_pivot ? temp_tc   : temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+hourly6_tc          = hourly6_ttc > hourly6_tbc ? hourly6_ttc : hourly6_tbc
+hourly6_bc          = hourly6_tbc < hourly6_ttc ? hourly6_tbc : hourly6_ttc
+hourly4_pivot       = request.security(syminfo.tickerid, '240', show_next_day_pivot ? pivot     : pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
+hourly4_tbc         = request.security(syminfo.tickerid, '240', show_next_day_pivot ? temp_bc   : temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+hourly4_ttc         = request.security(syminfo.tickerid, '240', show_next_day_pivot ? temp_tc   : temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
+hourly4_tc          = hourly4_ttc > hourly4_tbc ? hourly4_ttc : hourly4_tbc
+hourly4_bc          = hourly4_tbc < hourly4_ttc ? hourly4_tbc : hourly4_ttc
 hourly_pivot        = request.security(syminfo.tickerid, '60',  show_next_day_pivot ? pivot     : pivot[1],     barmerge.gaps_off, barmerge.lookahead_on)
 hourly_tbc          = request.security(syminfo.tickerid, '60',  show_next_day_pivot ? temp_bc   : temp_bc[1],   barmerge.gaps_off, barmerge.lookahead_on)
 hourly_ttc          = request.security(syminfo.tickerid, '60',  show_next_day_pivot ? temp_tc   : temp_tc[1],   barmerge.gaps_off, barmerge.lookahead_on)
@@ -144,6 +161,16 @@ daily_pivot_plot        = plot(show_daily_cpr           ? daily_pivot       : na
 daily_tcline            = plot(show_daily_cpr_band      ? daily_tc          : na, title='Daily TC',         color=color.new(daily_cpr_color, 0),        linewidth=0, style=plot.style_circles)
 daily_bcline            = plot(show_daily_cpr_band      ? daily_bc          : na, title='Daily BC',         color=color.new(daily_cpr_color, 0),        linewidth=0, style=plot.style_circles)
 fill(daily_tcline, daily_bcline, color=color.new(daily_cpr_color, show_daily_cpr_band ? 95 : 100))
+// 6 Hourly CPR   
+hourly6_pivot_plot       = plot(show_hourly6_cpr        ? hourly6_pivot     : na, title='6H Pivot',         color=color.new(hourly6_pivot_color, 0),     linewidth=1, style=plot.style_circles)
+hourly6_tcline           = plot(show_hourly6_cpr_band   ? hourly6_tc        : na, title='6H TC',            color=color.new(hourly6_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+hourly6_bcline           = plot(show_hourly6_cpr_band   ? hourly6_bc        : na, title='6H BC',            color=color.new(hourly6_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+fill(hourly6_tcline, hourly6_bcline, color=color.new(hourly6_cpr_color, show_hourly6_cpr_band ? 95 : 100))
+// 4 Hourly CPR   
+hourly4_pivot_plot       = plot(show_hourly4_cpr        ? hourly4_pivot     : na, title='4H Pivot',         color=color.new(hourly4_pivot_color, 0),     linewidth=1, style=plot.style_circles)
+hourly4_tcline           = plot(show_hourly4_cpr_band   ? hourly4_tc        : na, title='4H TC',            color=color.new(hourly4_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+hourly4_bcline           = plot(show_hourly4_cpr_band   ? hourly4_bc        : na, title='4H BC',            color=color.new(hourly4_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+fill(hourly4_tcline, hourly4_bcline, color=color.new(hourly4_cpr_color, show_hourly4_cpr_band ? 95 : 100))
 // Hourly CPR   
 hourly_pivot_plot       = plot(show_hourly_cpr          ? hourly_pivot      : na, title='Hourly Pivot',     color=color.new(hourly_pivot_color, 0),     linewidth=1, style=plot.style_circles)
 hourly_tcline           = plot(show_hourly_cpr_band     ? hourly_tc         : na, title='Hourly TC',        color=color.new(hourly_cpr_color, 0),       linewidth=0, style=plot.style_circles)
@@ -161,6 +188,8 @@ if show_labels
     var label monthly_pivot_label       = na   
     var label weekly_pivot_label        = na   
     var label daily_pivot_label         = na   
+    var label hourly6_pivot_label       = na   
+    var label hourly4_pivot_label       = na   
     var label hourly_pivot_label        = na   
 
     label.delete(yearly_pivot_label)
@@ -168,6 +197,8 @@ if show_labels
     label.delete(monthly_pivot_label)
     label.delete(weekly_pivot_label)
     label.delete(daily_pivot_label)
+    label.delete(hourly6_pivot_label)
+    label.delete(hourly4_pivot_label)
     label.delete(hourly_pivot_label)
     if show_yearly_cpr
         yearly_pivot_label      := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = yearly_pivot,     text = "Yearly Pivot",      color = yearly_pivot_color,     textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
@@ -179,6 +210,10 @@ if show_labels
         weekly_pivot_label      := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = weekly_pivot,     text = "Weekly Pivot",      color = weekly_pivot_color,     textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
     if show_daily_cpr
         daily_pivot_label       := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = daily_pivot,      text = "Daily Pivot",       color = daily_pivot_color,      textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
+    if show_hourly6_cpr
+        hourly6_pivot_label     := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly6_pivot,    text = "6 Hourly Pivot",    color = hourly6_pivot_color,    textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
+    if show_hourly4_cpr
+        hourly4_pivot_label     := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly4_pivot,    text = "4 Hourly Pivot",    color = hourly4_pivot_color,    textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
     if show_hourly_cpr
         hourly_pivot_label      := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly_pivot,     text = "Hourly Pivot",      color = hourly_pivot_color,     textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
 
@@ -191,7 +226,6 @@ if show_macd_crossovers
         label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.tiny, tooltip="MACD Bearcross")
 // MACD Histogram 
 if show_macd_histogram
-    // plot(hist, title="Histogram", style=plot.style_columns, color=(hist>=0 ? (hist[1] < hist ? col_grow_above : col_fall_above) : (hist[1] < hist ? col_grow_below : col_fall_below)))
     label.new(x=bar_index, y=hist>=0 ? high : low, yloc=hist>=0 ? yloc.abovebar : yloc.belowbar, color=(hist>=0 ? (hist[1] < hist ? macd_grow_above_color : macd_fall_above_color) : (hist[1] < hist ? macd_grow_below_color : macd_fall_below_color)), style=label.style_circle, size=size.auto, tooltip="MACD Momentum")
 // MACD Momentum 
 if show_macd_momentum
