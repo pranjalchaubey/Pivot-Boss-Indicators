@@ -44,7 +44,8 @@ show_next_day_pivot         = input.bool(false,                         title='S
 
 
 show_macd_crossovers        = input.bool(true,                          title="Show MACD Crossovers on Chart",          group="MACD Momentum")
-show_macd_histogram         = input.bool(true,                          title="Indicate MACD Histogram on Chart",       group="MACD Momentum")
+show_macd_histogram         = input.bool(false,                         title="Show MACD Histogram on Chart",           group="MACD Momentum")
+show_macd_momentum          = input.bool(true,                          title="Show MACD Histogram Extremes on Chart",  group="MACD Momentum")
 fast_length                 = input.int(12,                             title="Fast Length",                            group="MACD Momentum")
 slow_length                 = input.int(26,                             title="Slow Length",                            group="MACD Momentum")
 src                         = input.source(close,                       title="Source",                                 group="MACD Momentum")
@@ -185,6 +186,10 @@ if show_labels
 // MACD Crossovers 
 if show_macd_crossovers
     if macd_bullcross
-        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup, size=size.auto, tooltip="MACD Bullcross")
+        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup, size=size.tiny, tooltip="MACD Bullcross")
     if macd_bearcross
-        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Bearcross")
+        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.tiny, tooltip="MACD Bearcross")
+// MACD Histogram 
+if show_macd_histogram
+    // plot(hist, title="Histogram", style=plot.style_columns, color=(hist>=0 ? (hist[1] < hist ? col_grow_above : col_fall_above) : (hist[1] < hist ? col_grow_below : col_fall_below)))
+    label.new(x=bar_index, y=hist>=0 ? high : low, yloc=hist>=0 ? yloc.abovebar : yloc.belowbar, color=(hist>=0 ? (hist[1] < hist ? macd_grow_above_color : macd_fall_above_color) : (hist[1] < hist ? macd_grow_below_color : macd_fall_below_color)), style=label.style_circle, size=size.auto, tooltip="MACD Momentum")
