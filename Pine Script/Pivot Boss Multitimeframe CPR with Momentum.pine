@@ -177,14 +177,14 @@ daily_tcline            = plot(show_daily_cpr_band      ? daily_tc          : na
 daily_bcline            = plot(show_daily_cpr_band      ? daily_bc          : na, title='Daily BC',         color=color.new(daily_cpr_color, 0),        linewidth=0, style=plot.style_circles)
 fill(daily_tcline, daily_bcline, color=color.new(daily_cpr_color, show_daily_cpr_band ? 95 : 100))
 // 6 Hourly CPR   
-hourly6_pivot_plot       = plot(show_hourly6_cpr        ? hourly6_pivot     : na, title='6H Pivot',         color=color.new(hourly6_pivot_color, 0),     linewidth=1, style=plot.style_circles)
-hourly6_tcline           = plot(show_hourly6_cpr_band   ? hourly6_tc        : na, title='6H TC',            color=color.new(hourly6_cpr_color, 0),       linewidth=0, style=plot.style_circles)
-hourly6_bcline           = plot(show_hourly6_cpr_band   ? hourly6_bc        : na, title='6H BC',            color=color.new(hourly6_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+hourly6_pivot_plot      = plot(show_hourly6_cpr         ? hourly6_pivot     : na, title='6H Pivot',         color=color.new(hourly6_pivot_color, 0),    linewidth=1, style=plot.style_circles)
+hourly6_tcline          = plot(show_hourly6_cpr_band    ? hourly6_tc        : na, title='6H TC',            color=color.new(hourly6_cpr_color, 0),      linewidth=0, style=plot.style_circles)
+hourly6_bcline          = plot(show_hourly6_cpr_band    ? hourly6_bc        : na, title='6H BC',            color=color.new(hourly6_cpr_color, 0),      linewidth=0, style=plot.style_circles)
 fill(hourly6_tcline, hourly6_bcline, color=color.new(hourly6_cpr_color, show_hourly6_cpr_band ? 95 : 100))
 // 4 Hourly CPR   
-hourly4_pivot_plot       = plot(show_hourly4_cpr        ? hourly4_pivot     : na, title='4H Pivot',         color=color.new(hourly4_pivot_color, 0),     linewidth=1, style=plot.style_circles)
-hourly4_tcline           = plot(show_hourly4_cpr_band   ? hourly4_tc        : na, title='4H TC',            color=color.new(hourly4_cpr_color, 0),       linewidth=0, style=plot.style_circles)
-hourly4_bcline           = plot(show_hourly4_cpr_band   ? hourly4_bc        : na, title='4H BC',            color=color.new(hourly4_cpr_color, 0),       linewidth=0, style=plot.style_circles)
+hourly4_pivot_plot      = plot(show_hourly4_cpr         ? hourly4_pivot     : na, title='4H Pivot',         color=color.new(hourly4_pivot_color, 0),    linewidth=1, style=plot.style_circles)
+hourly4_tcline          = plot(show_hourly4_cpr_band    ? hourly4_tc        : na, title='4H TC',            color=color.new(hourly4_cpr_color, 0),      linewidth=0, style=plot.style_circles)
+hourly4_bcline          = plot(show_hourly4_cpr_band    ? hourly4_bc        : na, title='4H BC',            color=color.new(hourly4_cpr_color, 0),      linewidth=0, style=plot.style_circles)
 fill(hourly4_tcline, hourly4_bcline, color=color.new(hourly4_cpr_color, show_hourly4_cpr_band ? 95 : 100))
 // Hourly CPR   
 hourly_pivot_plot       = plot(show_hourly_cpr          ? hourly_pivot      : na, title='Hourly Pivot',     color=color.new(hourly_pivot_color, 0),     linewidth=1, style=plot.style_circles)
