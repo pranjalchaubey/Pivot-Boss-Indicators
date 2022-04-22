@@ -8,42 +8,42 @@ indicator(title='[CP]Pivot Boss Multi Timeframe CPR with MACD', shorttitle='[CP]
 
 // User Inputs 
 //==============================================================================
-show_yearly_cpr             = input.bool(true,                          title='Yearly Pivot',       inline='yearly',    group='Multi Timeframe Central Pivot Range')
+show_yearly_cpr             = input.bool(true,                          title='Yearly Pivot      ', inline='yearly',    group='Multi Timeframe Central Pivot Range')
 yearly_pivot_color          = input.color(color.new(color.yellow, 0),   title='',                   inline='yearly',    group='Multi Timeframe Central Pivot Range')
 show_yearly_cpr_band        = input.bool(true,                          title='CPR Band',           inline='yearly',    group='Multi Timeframe Central Pivot Range')
 yearly_cpr_color            = input.color(color.new(color.blue, 50),    title='',                   inline='yearly',    group='Multi Timeframe Central Pivot Range')
 
-show_quarterly_cpr          = input.bool(true,                          title='Quarterly Pivot',    inline='quarterly', group='Multi Timeframe Central Pivot Range')
+show_quarterly_cpr          = input.bool(true,                          title='Quarterly Pivot ',   inline='quarterly', group='Multi Timeframe Central Pivot Range')
 quarterly_pivot_color       = input.color(color.new(color.fuchsia, 0),  title='',                   inline='quarterly', group='Multi Timeframe Central Pivot Range')
 show_quarterly_cpr_band     = input.bool(true,                          title='CPR Band',           inline='quarterly', group='Multi Timeframe Central Pivot Range')
 quarterly_cpr_color         = input.color(color.new(color.olive, 50),   title='',                   inline='quarterly', group='Multi Timeframe Central Pivot Range')
 
-show_monthly_cpr            = input.bool(false,                         title='Monthly Pivot',      inline='monthly',   group='Multi Timeframe Central Pivot Range')
+show_monthly_cpr            = input.bool(false,                         title='Monthly Pivot   ',   inline='monthly',   group='Multi Timeframe Central Pivot Range')
 monthly_pivot_color         = input.color(color.new(color.teal, 0),     title='',                   inline='monthly',   group='Multi Timeframe Central Pivot Range')
 show_monthly_cpr_band       = input.bool(false,                         title='CPR Band',           inline='monthly',   group='Multi Timeframe Central Pivot Range')
 monthly_cpr_color           = input.color(color.new(color.navy, 50),    title='',                   inline='monthly',   group='Multi Timeframe Central Pivot Range')
 
-show_weekly_cpr             = input.bool(true,                          title='Weekly Pivot',       inline='weekly',    group='Multi Timeframe Central Pivot Range')
+show_weekly_cpr             = input.bool(true,                          title='Weekly Pivot    ',   inline='weekly',    group='Multi Timeframe Central Pivot Range')
 weekly_pivot_color          = input.color(color.new(color.orange, 0),   title='',                   inline='weekly',    group='Multi Timeframe Central Pivot Range')
 show_weekly_cpr_band        = input.bool(true,                          title='CPR Band',           inline='weekly',    group='Multi Timeframe Central Pivot Range')
 weekly_cpr_color            = input.color(color.new(color.purple, 50),  title='',                   inline='weekly',    group='Multi Timeframe Central Pivot Range')
 
-show_daily_cpr              = input.bool(false,                         title='Daily Pivot',        inline='daily',     group='Multi Timeframe Central Pivot Range')
+show_daily_cpr              = input.bool(false,                         title='Daily Pivot       ', inline='daily',     group='Multi Timeframe Central Pivot Range')
 daily_pivot_color           = input.color(color.new(color.red, 0),      title='',                   inline='daily',     group='Multi Timeframe Central Pivot Range')
 show_daily_cpr_band         = input.bool(false,                         title='CPR Band',           inline='daily',     group='Multi Timeframe Central Pivot Range')
 daily_cpr_color             = input.color(color.new(color.lime, 50),    title='',                   inline='daily',     group='Multi Timeframe Central Pivot Range')
 
-show_hourly6_cpr            = input.bool(false,                         title='6 Hourly Pivot',     inline='hourly6',   group='Multi Timeframe Central Pivot Range')
+show_hourly6_cpr            = input.bool(false,                         title='6 Hourly Pivot  ',   inline='hourly6',   group='Multi Timeframe Central Pivot Range')
 hourly6_pivot_color         = input.color(color.new(color.green, 0),    title='',                   inline='hourly6',   group='Multi Timeframe Central Pivot Range')
 show_hourly6_cpr_band       = input.bool(false,                         title='CPR Band',           inline='hourly6',   group='Multi Timeframe Central Pivot Range')
 hourly6_cpr_color           = input.color(color.new(color.gray, 50),    title='',                   inline='hourly6',   group='Multi Timeframe Central Pivot Range')
 
-show_hourly4_cpr            = input.bool(false,                         title='4 Hourly Pivot',     inline='hourly4',   group='Multi Timeframe Central Pivot Range')
+show_hourly4_cpr            = input.bool(false,                         title='4 Hourly Pivot  ',   inline='hourly4',   group='Multi Timeframe Central Pivot Range')
 hourly4_pivot_color         = input.color(color.new(color.green, 0),    title='',                   inline='hourly4',   group='Multi Timeframe Central Pivot Range')
 show_hourly4_cpr_band       = input.bool(false,                         title='CPR Band',           inline='hourly4',   group='Multi Timeframe Central Pivot Range')
 hourly4_cpr_color           = input.color(color.new(color.gray, 50),    title='',                   inline='hourly4',   group='Multi Timeframe Central Pivot Range')
 
-show_hourly_cpr             = input.bool(false,                         title='Hourly Pivot',       inline='hourly',    group='Multi Timeframe Central Pivot Range')
+show_hourly_cpr             = input.bool(false,                         title='Hourly Pivot    ',   inline='hourly',    group='Multi Timeframe Central Pivot Range')
 hourly_pivot_color          = input.color(color.new(color.green, 0),    title='',                   inline='hourly',    group='Multi Timeframe Central Pivot Range')
 show_hourly_cpr_band        = input.bool(false,                         title='CPR Band',           inline='hourly',    group='Multi Timeframe Central Pivot Range')
 hourly_cpr_color            = input.color(color.new(color.gray, 50),    title='',                   inline='hourly',    group='Multi Timeframe Central Pivot Range')
@@ -55,9 +55,9 @@ show_next_day_pivot         = input.bool(false,                         title='S
 
 show_ema                    = input.bool(true,                          title="Show EMA on Chart",                      group="EMA Trend")
 show_ema_crossovers         = input.bool(true,                          title="Mark EMA Crossovers on Chart",           group="EMA Trend")
-ema_fast                    = input.int(12,                             title="Fast EMA Length",    inline="FEMA",      group="EMA Trend")
+ema_fast                    = input.int(12,                             title="Fast EMA Length  ",  inline="FEMA",      group="EMA Trend")
 ema_fast_color              = input(color.orange,                       title="",                   inline="FEMA",      group="EMA Trend")
-ema_slow                    = input.int(26,                             title="Slow EMA Length",    inline="SEMA",      group="EMA Trend")
+ema_slow                    = input.int(26,                             title="Slow EMA Length ",   inline="SEMA",      group="EMA Trend")
 ema_slow_color              = input(color.green,                        title="",                   inline="SEMA",      group="EMA Trend")
 ema_bullcross_color         = input(color.yellow,                       title="Bullish EMA Cross",                      group="EMA Trend")
 ema_bearcross_color         = input(color.yellow,                       title="Bearish EMA Cross",                      group="EMA Trend")
@@ -241,15 +241,15 @@ plot(show_ema ? slow_ema_value : na, title='Slow EMA', color=ema_slow_color, lin
 // EMA Crossovers 
 if show_ema_crossovers
     if ema_bullcross
-        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=ema_bullcross_color, style=label.style_circle, size=size.tiny, tooltip="EMA Bullcross")
+        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=ema_bullcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bullcross")
     if ema_bearcross
-        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=ema_bearcross_color, style=label.style_circle, size=size.tiny, tooltip="EMA Bearcross")
+        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=ema_bearcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bearcross")
 
 
 // MACD Crossovers 
 if show_macd_crossovers
     if macd_bullcross
-        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup, size=size.tiny, tooltip="MACD Bullcross")
+        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup,   size=size.tiny, tooltip="MACD Bullcross")
     if macd_bearcross
         label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.tiny, tooltip="MACD Bearcross")
 // MACD Histogram 
@@ -260,4 +260,4 @@ if show_macd_momentum
     if ((hist >= 0) and (hist[2] < hist[1]) and (hist[1] > hist) )      // Peak Detection in MACD Histogram 
         label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_grow_above_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Momentum")
     if ((hist < 0) and (hist[2] > hist[1]) and (hist[1] < hist) )      // Peak Detection in MACD Histogram 
-        label.new(x=bar_index, y=low, yloc=yloc.belowbar, color=macd_grow_below_color, style=label.style_triangleup, size=size.auto, tooltip="MACD Momentum")
+        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_grow_below_color, style=label.style_triangleup,   size=size.auto, tooltip="MACD Momentum")
