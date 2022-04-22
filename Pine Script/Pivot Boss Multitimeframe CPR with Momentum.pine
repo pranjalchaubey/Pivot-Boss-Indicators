@@ -53,16 +53,19 @@ show_labels                 = input.bool(true,                          title='S
 show_next_day_pivot         = input.bool(false,                         title='Show Next Time Period Pivots',           group='CPR Configuration')
 
 
-show_ema_crossovers         = input.bool(true,                          title="Show EMA Crossovers on Chart",           group="EMA Trend")
-ema_fast                    = input.int(12,                             title="Fast EMA Length",                        group="EMA Trend")
-ema_slow                    = input.int(26,                             title="Slow EMA Length",                        group="EMA Trend")
+show_ema                    = input.bool(true,                          title="Show EMA on Chart",                      group="EMA Trend")
+show_ema_crossovers         = input.bool(true,                          title="Mark EMA Crossovers on Chart",           group="EMA Trend")
+ema_fast                    = input.int(12,                             title="Fast EMA Length",    inline="FEMA",      group="EMA Trend")
+ema_fast_color              = input(color.orange,                       title="",                   inline="FEMA",      group="EMA Trend")
+ema_slow                    = input.int(26,                             title="Slow EMA Length",    inline="SEMA",      group="EMA Trend")
+ema_slow_color              = input(color.green,                        title="",                   inline="SEMA",      group="EMA Trend")
 ema_bullcross_color         = input(color.yellow,                       title="Bullish EMA Cross",                      group="EMA Trend")
 ema_bearcross_color         = input(color.yellow,                       title="Bearish EMA Cross",                      group="EMA Trend")
 
 
-show_macd_crossovers        = input.bool(true,                          title="Show MACD Crossovers on Chart",          group="MACD Momentum")
+show_macd_crossovers        = input.bool(true,                          title="Mark MACD Crossovers on Chart",          group="MACD Momentum")
 show_macd_histogram         = input.bool(false,                         title="Show MACD Histogram on Chart",           group="MACD Momentum")
-show_macd_momentum          = input.bool(true,                          title="Show MACD Histogram Peaks on Chart",     group="MACD Momentum")
+show_macd_momentum          = input.bool(true,                          title="Mark MACD Histogram Peaks on Chart",     group="MACD Momentum")
 fast_length                 = input.int(12,                             title="Fast Length",                            group="MACD Momentum")
 slow_length                 = input.int(26,                             title="Slow Length",                            group="MACD Momentum")
 src                         = input.source(close,                       title="Source",                                 group="MACD Momentum")
@@ -228,6 +231,11 @@ if show_labels
         hourly4_pivot_label     := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly4_pivot,    text = "4 Hourly Pivot",    color = hourly4_pivot_color,    textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
     if show_hourly_cpr
         hourly_pivot_label      := label.new(x = timeframe.isintraday ? time + chper * 5 :  time + chper, y = hourly_pivot,     text = "Hourly Pivot",      color = hourly_pivot_color,     textcolor=color.black, style=label.style_label_down, xloc = xloc.bar_time, yloc=yloc.price) 
+
+
+// EMA
+plot(show_ema ? fast_ema_value : na, title='Fast EMA', color=ema_fast_color, linewidth=1)
+plot(show_ema ? slow_ema_value : na, title='Slow EMA', color=ema_slow_color, linewidth=1)
 
 
 // EMA Crossovers 
