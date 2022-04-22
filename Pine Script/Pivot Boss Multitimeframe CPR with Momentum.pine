@@ -261,3 +261,11 @@ if show_macd_momentum
         label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_grow_above_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Momentum")
     if ((hist < 0) and (hist[2] > hist[1]) and (hist[1] < hist) )      // Peak Detection in MACD Histogram 
         label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_grow_below_color, style=label.style_triangleup,   size=size.auto, tooltip="MACD Momentum")
+
+
+// Alerts   
+//==============================================================================
+alertcondition(ema_bullcross,   title="EMA Bullcross",  message="Time to go long!")
+alertcondition(ema_bearcross,   title="EMA Bearcross",  message="Time to go short!")
+alertcondition(macd_bullcross,  title="MACD Bullcross", message="Time to go long!")
+alertcondition(macd_bearcross,  title="MACD Bearcross", message="Time to go short!")
