@@ -3,7 +3,7 @@
 // © pranjalchaubey
 
 //Structural Pivots
-indicator(title='[CP]Pivot Boss Multi Timeframe CPR with MACD', shorttitle='[CP]Pivot Boss CPR + MACD', overlay=true, max_labels_count=500)
+indicator(title='[CP]Pivot Boss Multi Timeframe CPR Inception with MACD Momentum and EMA Trend', shorttitle='[CP]Pivot Boss CPR + MACD + EMA', overlay=true, max_labels_count=500)
 
 
 // Rangebound MACD and EMA Markings 
