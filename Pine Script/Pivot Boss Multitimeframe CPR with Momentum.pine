@@ -6,6 +6,22 @@
 indicator(title='[CP]Pivot Boss Multi Timeframe CPR with MACD', shorttitle='[CP]Pivot Boss CPR + MACD', overlay=true, max_labels_count=500)
 
 
+// Rangebound MACD and EMA Markings 
+//==============================================================================
+tooltip = "Pine Script limits the max number of lables that can be shown on a chart to 500. Therefore, if you go far back enough, you won't see any markings for the MACD or EMA setups. If you are looking to test the efficacy of this indicator in the past, change the start and end dates to your desired timeframe."
+// Set the date range
+startDate   = input.int(title="Start Date",     defval=1,       minval=1,       maxval=31,      group="Rangebound MACD and EMA Markings")
+startMonth  = input.int(title="Start Month",    defval=1,       minval=1,       maxval=12,      group="Rangebound MACD and EMA Markings")
+startYear   = input.int(title="Start Year",     defval=2010,    minval=1970,    maxval=2100,    group="Rangebound MACD and EMA Markings")
+
+endDate     = input.int(title="End Date",       defval=31,      minval=1,       maxval=31,      group="Rangebound MACD and EMA Markings")
+endMonth    = input.int(title="End Month",      defval=12,      minval=1,       maxval=12,      group="Rangebound MACD and EMA Markings")
+endYear     = input.int(title="End Year",       defval=2012,    minval=1970,    maxval=2100,    group="Rangebound MACD and EMA Markings")
+// Look if the current_close time of the current bar falls inside the date range
+inDateRange = (time >= timestamp(syminfo.timezone, startYear, startMonth, startDate, 0, 0)) and (time < timestamp(syminfo.timezone, endYear, endMonth, endDate, 0, 0))
+date_range  = input.bool(false,  title="Mark MACD and EMA Setups in Range?", tooltip = tooltip,      group="Rangebound MACD and EMA Markings")
+
+
 // User Inputs 
 //==============================================================================
 show_yearly_cpr             = input.bool(true,                          title='Yearly Pivot      ', inline='yearly',    group='Multi Timeframe Central Pivot Range')
@@ -238,29 +254,30 @@ plot(show_ema ? fast_ema_value : na, title='Fast EMA', color=ema_fast_color, lin
 plot(show_ema ? slow_ema_value : na, title='Slow EMA', color=ema_slow_color, linewidth=1)
 
 
-// EMA Crossovers 
-if show_ema_crossovers
-    if ema_bullcross
-        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=ema_bullcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bullcross")
-    if ema_bearcross
-        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=ema_bearcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bearcross")
+if not(date_range == true and inDateRange == false)  
+    // EMA Crossovers 
+    if show_ema_crossovers
+        if ema_bullcross
+            label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=ema_bullcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bullcross")
+        if ema_bearcross
+            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=ema_bearcross_color, style=label.style_diamond, size=size.tiny, tooltip="EMA Bearcross")
 
 
-// MACD Crossovers 
-if show_macd_crossovers
-    if macd_bullcross
-        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup,   size=size.tiny, tooltip="MACD Bullcross")
-    if macd_bearcross
-        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.tiny, tooltip="MACD Bearcross")
-// MACD Histogram 
-if show_macd_histogram
-    label.new(x=bar_index, y=hist>=0 ? high : low, yloc=hist>=0 ? yloc.abovebar : yloc.belowbar, color=(hist>=0 ? (hist[1] < hist ? macd_grow_above_color : macd_fall_above_color) : (hist[1] < hist ? macd_grow_below_color : macd_fall_below_color)), style=label.style_circle, size=size.auto, tooltip="MACD Momentum")
-// MACD Momentum 
-if show_macd_momentum
-    if ((hist >= 0) and (hist[2] < hist[1]) and (hist[1] > hist) )      // Peak Detection in MACD Histogram 
-        label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_grow_above_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Momentum")
-    if ((hist < 0) and (hist[2] > hist[1]) and (hist[1] < hist) )      // Peak Detection in MACD Histogram 
-        label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_grow_below_color, style=label.style_triangleup,   size=size.auto, tooltip="MACD Momentum")
+    // MACD Crossovers 
+    if show_macd_crossovers
+        if macd_bullcross
+            label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_bullcross_color, style=label.style_triangleup,   size=size.tiny, tooltip="MACD Bullcross")
+        if macd_bearcross
+            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_bearcross_color, style=label.style_triangledown, size=size.tiny, tooltip="MACD Bearcross")
+    // MACD Histogram 
+    if show_macd_histogram
+        label.new(x=bar_index, y=hist>=0 ? high : low, yloc=hist>=0 ? yloc.abovebar : yloc.belowbar, color=(hist>=0 ? (hist[1] < hist ? macd_grow_above_color : macd_fall_above_color) : (hist[1] < hist ? macd_grow_below_color : macd_fall_below_color)), style=label.style_circle, size=size.auto, tooltip="MACD Momentum")
+    // MACD Momentum 
+    if show_macd_momentum
+        if ((hist >= 0) and (hist[2] < hist[1]) and (hist[1] > hist) )      // Peak Detection in MACD Histogram 
+            label.new(x=bar_index, y=high, yloc=yloc.abovebar, color=macd_grow_above_color, style=label.style_triangledown, size=size.auto, tooltip="MACD Momentum")
+        if ((hist < 0) and (hist[2] > hist[1]) and (hist[1] < hist) )      // Peak Detection in MACD Histogram 
+            label.new(x=bar_index, y=low,  yloc=yloc.belowbar, color=macd_grow_below_color, style=label.style_triangleup,   size=size.auto, tooltip="MACD Momentum")
 
 
 // Alerts   
