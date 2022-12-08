@@ -8,7 +8,7 @@ study(title="[CP]Pivot Boss Floor Pivots with ATR Dilation and Dynamic Levels", 
 
 // User Inputs 
 //==============================================================================
-floor_pivot_timeframe           = input("D",    options=["D", "W", "M", "12M"],             title="Floor Pivot Timeframe",                      group="Floor Pivots")
+floor_pivot_timeframe           = input("D",    options=["1H", "2H", "4H", "D", "W", "M", "12M"], title="Floor Pivot Timeframe",                group="Floor Pivots")
 show_floor_pivots               = input(true,   type=input.bool,                            title="Show Floor Pivots",                          group="Floor Pivots")
 show_cpr                        = input(true,   type=input.bool,                            title="Show CPR",                                   group="Floor Pivots")
 show_labels                     = input(true,   type=input.bool,                            title="Show Pivot Lables",                          group="Floor Pivots")
@@ -83,7 +83,7 @@ dynamic_low = low - dynamic_pivot_atr
 // Average True Range for Pivot Level Dilation
 atr_norm = atr(atr_period) * atr_multiplier
 // Timeframe 
-floor_pivot_resolution = floor_pivot_timeframe
+floor_pivot_resolution = floor_pivot_timeframe == "1H" ? '60' : floor_pivot_timeframe == "2H" ? '120' : floor_pivot_timeframe == "4H" ? '240' : floor_pivot_timeframe
 // Bonus Indicators 
 val_ma1 = if ma1 == "SMA"       // Moving Average 1
     sma(src1, len1)
